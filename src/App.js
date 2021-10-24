@@ -44,7 +44,7 @@ function App() {
       <CssBaseline />
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/harcmiliada-front">
             <Board />
           </Route>
           <Route exact path="/dashboard/console">
