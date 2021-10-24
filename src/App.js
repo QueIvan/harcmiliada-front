@@ -76,7 +76,7 @@ function App() {
           </Route>
           <Route exact path="/logout">
             {() => {
-              logout();
+              logout({redirectTo: "https://ivanplease.github.io/harcmiliada-front/#/dashboard"});
               return null;
             }}
           </Route>
