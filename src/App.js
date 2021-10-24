@@ -42,9 +42,9 @@ function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <Switch>
-          <Route exact path="/harcmiliada-front">
+          <Route exact path="/">
             <Board />
           </Route>
           <Route exact path="/dashboard/console">
