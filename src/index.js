@@ -3,19 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
-import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import { HashRouter } from 'react-router-dom';
 
 ReactDOM.render(
-  <Auth0Provider
-    domain="dev-6x5bsznk.us.auth0.com"
-    clientId="w9oZIPZyRhMrvdaGo0xwf585KtwtfuBT"
-    redirectUri={window.location.origin+"/dashboard"}
-  >
-    <Router basename={process.env.PUBLIC_URL}>
+  <HashRouter>
+    <Auth0Provider
+      domain="dev-6x5bsznk.us.auth0.com"
+      clientId="w9oZIPZyRhMrvdaGo0xwf585KtwtfuBT"
+      redirectUri={window.location.origin+"/dashboard"}
+    >
       <App />
-    </Router>
-  </Auth0Provider>,
+    </Auth0Provider>
+  </HashRouter>,
   document.getElementById('root')
 );
 
