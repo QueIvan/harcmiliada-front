@@ -12,7 +12,7 @@ ReactDOM.render(
     clientId="w9oZIPZyRhMrvdaGo0xwf585KtwtfuBT"
     redirectUri={window.location.origin+"/dashboard"}
   >
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <App />
     </Router>
   </Auth0Provider>,
