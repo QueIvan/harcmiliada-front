@@ -25,6 +25,21 @@ function App() {
         main: "#20262D",
         text: "#CCCCCC",
       },
+      available: {
+        main: "#5FBB97",
+        backDrop: "#BAA7B080",
+        text: "#FFFFFF",
+      },
+      done: {
+        main: "#E00000",
+        backDrop: "#E0000080",
+        text: "#FFFFFF",
+      },
+      shown: {
+        main: "#5DA9E9",
+        backDrop: "#5DA9E980",
+        text: "#FFFFFF",
+      },
       breadcrumbs: {
         current: "#f1f1f1",
         past: "#8f8f8f",
@@ -42,7 +57,7 @@ function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <Router basename="/harcmiliada-front">
+      <Router>
         <Switch>
           <Route exact path="/">
             <Board />

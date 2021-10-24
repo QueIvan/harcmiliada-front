@@ -27,17 +27,18 @@ export default function ViewQuestion() {
         e.preventDefault();
         setLoading(!loading);
         let obj = {
-            id: id,
             content: content,
             answers: answers.filter(value => Object.keys(value).length !== 0)
         }
-        console.log(obj)
+        if(id){
+            obj["id"] = id;
+        }
         fetch(host + "questions/",{
             headers : { 
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             },
-            method: 'PUT',
+            method: (id) ? 'PUT':'POST',
             body: JSON.stringify(obj)
         }).then(() => history.push("/dashboard"))
         .catch((err) => console.log(err));
