@@ -1,0 +1,151 @@
+import React, { useEffect, useState } from "react";
+import {
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  Box,
+  TableBody,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faEdit, faPlusSquare, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router";
+import Drawer from "./Drawer";
+
+function changeCurrentQuestion(id){
+    fetch("https://harcmiliada.herokuapp.com/questions/current/"+id,{
+        method: 'PUT'
+    }).then((response) => response.json())
+      .catch((err) => console.log(err));
+}
+
+function Row(props) {
+  const row = props.data;
+  const editHandle = props.editHandle;
+  const deleteHandle = props.deleteHandle;
+
+  return (
+    <TableRow key={row.id}>
+      <TableCell component="th" scope="row">
+        <span style={{ marginLeft: "15px" }}>
+            <FontAwesomeIcon icon={faCircle} color={(row.answers.every((value) => value.checked)) ? "red":"green"}/>
+            <span style={{ marginLeft: "5px", fontWeight: "bold", color: (row.answers.every((value) => value.checked)) ? "red":"green"}}>{(row.answers.every((value) => value.checked)) ? "Skończone":"Dostępne"}</span>
+        </span>
+        <span style={{ marginLeft: "25px" }}>{row.content}</span>
+      </TableCell>
+      <TableCell align="center">{row.answers.length}</TableCell>
+      <TableCell align="center">
+        <Tooltip title="Wyświetl" arrow placement="bottom">
+          <IconButton onClick={() => changeCurrentQuestion(row.id)}>
+            <FontAwesomeIcon size="xs" icon={faUpload} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Edytuj" arrow placement="bottom">
+          <IconButton onClick={() => editHandle(row.id)}>
+            <FontAwesomeIcon size="xs" icon={faEdit} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Usuń" arrow placement="bottom">
+          <IconButton onClick={() => deleteHandle(row.id)}>
+            <FontAwesomeIcon size="xs" icon={faTrashAlt} />
+          </IconButton>
+        </Tooltip>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export default function Dashboard() {
+  const host = "https://harcmiliada.herokuapp.com/";
+  const [questions, setQuestions] = useState({});
+  const history = useHistory();
+  const  crumbs={ past: [
+  ], current: "Pulpit" }
+
+  function moveToCreator(){
+    history.push("/dashboard/add")
+  }
+
+  function moveToViewer(id){
+    history.push("/dashboard/view/"+id)
+  }
+
+  function deleteQuestion(id){
+      fetch("https://harcmiliada.herokuapp.com/questions/"+id,{
+          method: 'DELETE'
+      }).then(() => {
+        history.push({ pathname: "/empty" });
+        history.replace({ pathname: "/dashboard" });
+      })
+        .catch((err) => console.log(err));
+  }
+
+  const columns = [
+    { id: "content", label: "Treść", minWidth: "300px", align: "center" },
+    { id: "answerCount", label: "Ilość odpowiedzi", align: "center" },
+    { id: "options", label: (
+        <Tooltip title="Dodaj pytanie" arrow placement="left">
+          <IconButton onClick={moveToCreator}>
+            <FontAwesomeIcon size="xs" icon={faPlusSquare} />
+          </IconButton>
+        </Tooltip>
+    ), align: "center" },
+  ];
+
+  useEffect(() => {
+    fetch(host + "questions")
+      .then((response) => response.json())
+      .then((json) => {
+        setQuestions(json);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  return (
+    <Drawer crumbs={crumbs}>
+      <Box
+        sx={{
+          padding: "25px"
+        }}
+      >
+        <TableContainer component={Paper}>
+          <Table stickyHeader aria-label="collapsible sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
+                  align="center"
+                  colSpan={3}
+                >
+                  Lista Pytań
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ top: 57, minWidth: column.minWidth }}
+                    sx={{ fontSize: "1.1rem" }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {questions.length > 0 &&
+                questions.map((question, key) => {
+                  return <Row editHandle={moveToViewer} deleteHandle={deleteQuestion} key={key} data={question} />;
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Drawer>
+  );
+}
