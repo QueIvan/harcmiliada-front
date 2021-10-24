@@ -11,6 +11,7 @@ export default function ViewQuestion() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState(false);
+  const [current, setCurrent] = useState(false);
   const [answers, setAnswers] = useState([
     {},
     {},
@@ -39,6 +40,7 @@ export default function ViewQuestion() {
     e.preventDefault();
     setLoading(!loading);
     let obj = {
+      current: current,
       content: content,
       answers: answers.filter((value) => Object.keys(value).length !== 0),
     };
@@ -80,6 +82,7 @@ export default function ViewQuestion() {
               .map(() => ({}));
             setContent(json.content);
             setAnswers([...json.answers, ...answer]);
+            setCurrent(json.current);
           }
         })
         .catch((err) => console.log(err));
