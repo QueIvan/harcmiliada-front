@@ -201,7 +201,7 @@ export default function Drawer(content) {
   };
 
   const handleLogOut = () => {
-    logout({ returnTo: window.location.origin });
+    logout({ returnTo: "https://ivanplease.github.io/harcmiliada-front/#/dashboard" });
   };
 
   const handleMove = (dest, toNew) => {

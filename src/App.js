@@ -74,12 +74,6 @@ function App() {
           <Route exact path="/dashboard/view/:id">
             {isAuthenticated ? <ViewQuestion /> : <Drawer loggedout />}
           </Route>
-          <Route exact path="/logout">
-            {() => {
-              logout({redirectTo: "https://ivanplease.github.io/harcmiliada-front/#/dashboard"});
-              return null;
-            }}
-          </Route>
         </Switch>
       </Router>
     </ThemeProvider>
