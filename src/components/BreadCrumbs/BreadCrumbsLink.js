@@ -8,7 +8,7 @@ import { useHistory } from "react-router";
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
   color: "inherit",
-  cursor: "pointer"
+  cursor: "pointer",
 }));
 
 export default function BreadCrumbsLink(content) {
@@ -17,10 +17,13 @@ export default function BreadCrumbsLink(content) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <StyledLink underline="hover" onClick={() => {
-        history.push({ pathname: "/empty" });
-        history.replace({ pathname: content.to.pathname });
-      }}>
+      <StyledLink
+        underline="hover"
+        onClick={() => {
+          history.push({ pathname: "/empty" });
+          history.replace({ pathname: content.to.pathname });
+        }}
+      >
         {content.children}
       </StyledLink>
     </ThemeProvider>

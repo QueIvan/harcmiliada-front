@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import ViewQuestion from "./components/ViewQuestion";
 import Drawer from "./components/Drawer";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react"
+import { useEffect } from "react";
 import Console from "./components/Console";
 
 function App() {
@@ -63,19 +63,22 @@ function App() {
             <Board />
           </Route>
           <Route exact path="/dashboard/console">
-            {(isAuthenticated) ? <Console /> : <Drawer loggedout />}
+            {isAuthenticated ? <Console /> : <Drawer loggedout />}
           </Route>
           <Route exact path="/dashboard">
-            {(isAuthenticated) ? <Dashboard /> : <Drawer loggedout />}
+            {isAuthenticated ? <Dashboard /> : <Drawer loggedout />}
           </Route>
           <Route exact path="/dashboard/add">
-            {(isAuthenticated) ? <ViewQuestion /> : <Drawer loggedout />}
+            {isAuthenticated ? <ViewQuestion /> : <Drawer loggedout />}
           </Route>
           <Route exact path="/dashboard/view/:id">
-            {(isAuthenticated) ? <ViewQuestion /> : <Drawer loggedout />}
+            {isAuthenticated ? <ViewQuestion /> : <Drawer loggedout />}
           </Route>
           <Route exact path="/logout">
-            {() => {logout();return null}}
+            {() => {
+              logout();
+              return null;
+            }}
           </Route>
         </Switch>
       </Router>

@@ -13,14 +13,18 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPlusSquare, faTrashAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faPlusSquare,
+  faTrashAlt,
+  faUpload,
+} from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
 import Drawer from "./Drawer";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
 
 const TypeBadge = styled("div")(({ theme, ...props }) => ({
   padding: ".35rem .75rem",
@@ -37,7 +41,7 @@ const TypeBadge = styled("div")(({ theme, ...props }) => ({
       ? theme.palette.done.text
       : theme.palette.shown.text,
   backgroundColor:
-  props.type === "available"
+    props.type === "available"
       ? theme.palette.available.main
       : props.type === "done"
       ? theme.palette.done.main
@@ -50,12 +54,16 @@ const TypeBadge = styled("div")(({ theme, ...props }) => ({
       ? theme.palette.done.backDrop
       : theme.palette.shown.backDrop),
   "&:after": {
-    content: "'" + capitalizeFirstLetter(
-      (props.type === "available"
-        ? "dostępne"
-        : props.type === "done"
-        ? "skończone"
-        : "wyświetlone")) + "'",
+    content:
+      "'" +
+      capitalizeFirstLetter(
+        props.type === "available"
+          ? "dostępne"
+          : props.type === "done"
+          ? "skończone"
+          : "wyświetlone"
+      ) +
+      "'",
   },
 }));
 
@@ -67,10 +75,20 @@ function Row(props) {
 
   return (
     <TableRow key={row.id}>
-      <TableCell component="th" scope="column" sx={{maxWidth: "75px", "&>*:not(:first-of-type)": {marginTop: ".45rem"}}}>
-        <TypeBadge type={(row.answers.every((value) => value.checked)) ? "done":"available"} />
-        {row.current ? 
-          <TypeBadge type="shown" />:null}
+      <TableCell
+        component="th"
+        scope="column"
+        sx={{
+          maxWidth: "75px",
+          "&>*:not(:first-of-type)": { marginTop: ".45rem" },
+        }}
+      >
+        <TypeBadge
+          type={
+            row.answers.every((value) => value.checked) ? "done" : "available"
+          }
+        />
+        {row.current ? <TypeBadge type="shown" /> : null}
       </TableCell>
       <TableCell component="th" scope="row">
         <span style={{ marginLeft: "25px" }}>{row.content}</span>
@@ -101,46 +119,53 @@ export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [questions, setQuestions] = useState({});
   const history = useHistory();
-  const  crumbs={ past: [
-  ], current: "Pulpit" }
+  const crumbs = { past: [], current: "Pulpit" };
 
-  function moveToCreator(){
-    history.push("/dashboard/add")
+  function moveToCreator() {
+    history.push("/dashboard/add");
   }
 
-  function moveToViewer(id){
-    history.push("/dashboard/view/"+id)
+  function moveToViewer(id) {
+    history.push("/dashboard/view/" + id);
   }
 
-  function deleteQuestion(id){
-      fetch("https://harcmiliada.herokuapp.com/questions/"+id,{
-          method: 'DELETE'
-      }).then(() => {
+  function deleteQuestion(id) {
+    fetch("https://harcmiliada.herokuapp.com/questions/" + id, {
+      method: "DELETE",
+    })
+      .then(() => {
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
-      }).catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   }
 
-  function changeCurrentQuestion(id){
-      fetch("https://harcmiliada.herokuapp.com/questions/current/"+id,{
-          method: 'PUT'
-      }).then(() => {
+  function changeCurrentQuestion(id) {
+    fetch("https://harcmiliada.herokuapp.com/questions/current/" + id, {
+      method: "PUT",
+    })
+      .then(() => {
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
-      }).catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   }
 
   const columns = [
-    { id: "status", label: ''},
+    { id: "status", label: "" },
     { id: "content", label: "Treść", minWidth: "300px", align: "center" },
     { id: "answerCount", label: "Ilość odpowiedzi", align: "center" },
-    { id: "options", label: (
+    {
+      id: "options",
+      label: (
         <Tooltip title="Dodaj pytanie" arrow placement="left">
           <IconButton onClick={moveToCreator}>
             <FontAwesomeIcon size="xs" icon={faPlusSquare} />
           </IconButton>
         </Tooltip>
-    ), align: "center" },
+      ),
+      align: "center",
+    },
   ];
 
   useEffect(() => {
@@ -156,7 +181,7 @@ export default function Dashboard() {
     <Drawer crumbs={crumbs}>
       <Box
         sx={{
-          padding: "25px"
+          padding: "25px",
         }}
       >
         <TableContainer component={Paper}>
@@ -187,7 +212,15 @@ export default function Dashboard() {
             <TableBody>
               {questions.length > 0 &&
                 questions.map((question, key) => {
-                  return <Row editHandle={moveToViewer} deleteHandle={deleteQuestion} currentHandle={changeCurrentQuestion} key={key} data={question} />;
+                  return (
+                    <Row
+                      editHandle={moveToViewer}
+                      deleteHandle={deleteQuestion}
+                      currentHandle={changeCurrentQuestion}
+                      key={key}
+                      data={question}
+                    />
+                  );
                 })}
             </TableBody>
           </Table>
