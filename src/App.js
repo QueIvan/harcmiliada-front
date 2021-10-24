@@ -42,7 +42,7 @@ function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <Router basename={process.env.PUBLIC_URL}>
+      <Router>
         <Switch>
           <Route exact path="/">
             <Board />

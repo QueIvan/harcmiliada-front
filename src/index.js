@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
+import { HashRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -11,7 +12,9 @@ ReactDOM.render(
     clientId="w9oZIPZyRhMrvdaGo0xwf585KtwtfuBT"
     redirectUri={window.location.origin+"/dashboard"}
   >
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Auth0Provider>,
   document.getElementById('root')
 );
