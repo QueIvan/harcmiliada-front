@@ -140,7 +140,7 @@ export default function Console() {
                               }}
                             >
                               <FontAwesomeIcon
-                                icon={row.checked ? faEyeSlash : faEye}
+                                icon={row.checked ? faEye : faEyeSlash}
                               />
                             </Grid>
                           </Grid>

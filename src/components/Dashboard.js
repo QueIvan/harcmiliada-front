@@ -191,7 +191,7 @@ export default function Dashboard() {
                 <TableCell
                   sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
                   align="center"
-                  colSpan={3}
+                  colSpan={4}
                 >
                   Lista Pytań
                 </TableCell>
