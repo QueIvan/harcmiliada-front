@@ -261,12 +261,12 @@ export default function Drawer(content) {
               >
                 <StyledLink
                   sx={{
-                    pointerEvents: !content.loggedout ? "auto" : "none",
+                    pointerEvents: !content.loggedout || obj.toNew ? "auto" : "none",
                     cursor: "pointer",
                   }}
                   onClick={() =>
                     handleMove(
-                      !content.loggedout ? obj.linkDest : "/",
+                      !content.loggedout || obj.toNew ? obj.linkDest : "/",
                       obj.toNew
                     )
                   }
