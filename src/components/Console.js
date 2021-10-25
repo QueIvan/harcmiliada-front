@@ -10,7 +10,7 @@ import { useTheme } from "@mui/system";
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT) + 1);
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + process.env.PORT;
   const history = useHistory();
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
