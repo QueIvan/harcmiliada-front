@@ -168,9 +168,15 @@ function AnswerLabel(props) {
   );
 }
 
-export default function Board() {
+function changePort(port){
+  var port = parseInt(port);
+  port += (port === 65535) ? -1:1;
+  return port.toString();
+}
+
+export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT)+1).toString();
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
   const history = useHistory();

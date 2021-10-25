@@ -2,7 +2,13 @@ const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 
-const port = (parseInt(process.env.PORT)+1).toString();
+function changePort(port){
+  var portValue = parseInt(port);
+  portValue += (portValue === 65535) ? -1:1;
+  return portValue.toString();
+}
+
+const port = changePort(process.env.PORT);
 
 const app = express();
 
@@ -32,4 +38,4 @@ io.on("connect", (socket) => {
     });
 
 });
-server.listen(port, () => console.log(`Listening on port ${port}, next port ${nextPort}`));
+server.listen(port, () => console.log(`Listening on port ${port}`));

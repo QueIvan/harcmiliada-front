@@ -7,10 +7,16 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
 import { useTheme } from "@mui/system";
 
+function changePort(port){
+  var port = parseInt(port);
+  port += (port === 65535) ? -1:1;
+  return port.toString();
+}
+
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT)+1).toString();
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const history = useHistory();
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
