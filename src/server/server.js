@@ -12,7 +12,7 @@ const port = changePort(process.env.PORT);
 
 const app = express();
 
-const server = http.createServer(app.use((req, res) => res.send("/public/index.html", {root: __dirname})));
+const server = http.createServer(app);
 
 const io = socketIo(server, { cors: { orgin: "*" } });
 

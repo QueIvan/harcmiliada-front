@@ -128,7 +128,7 @@ export default function Dashboard() {
 
   const crumbs = { past: [], current: "Pulpit" };
   
-  let socket = io();
+  let socket = io("ws://harcmiliada-front.herokuapp.com");
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
