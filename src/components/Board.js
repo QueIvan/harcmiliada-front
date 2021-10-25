@@ -218,7 +218,7 @@ export default function Board() {
         disconnectSocket();
       }
 
-  }, [reload]);
+  }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <BackBox>

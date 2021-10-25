@@ -209,7 +209,7 @@ export default function Dashboard() {
       return () => {
         disconnectSocket();
       }
-  }, [reload]);
+  }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Drawer crumbs={crumbs}>

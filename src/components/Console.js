@@ -74,7 +74,7 @@ export default function Console() {
         disconnectSocket();
       };
 
-  }, [reload]);
+  }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Drawer crumbs={crumbs}>
