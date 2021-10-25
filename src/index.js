@@ -9,7 +9,7 @@ ReactDOM.render(
   <Auth0Provider
     domain="dev-6x5bsznk.us.auth0.com"
     clientId="w9oZIPZyRhMrvdaGo0xwf585KtwtfuBT"
-    redirectUri={window.location.origin+"/harcmiliada-front/#/dashboard"}
+    redirectUri={window.location.origin+"/#/dashboard"}
   >
     <App />
   </Auth0Provider>,
