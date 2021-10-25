@@ -33,4 +33,6 @@ io.on("connect", (socket) => {
 
 });
 
-server.listen(port, () => console.log(`Listening on port ${port}`));
+const nextPort = (parseInt(port)+1).toString();
+
+server.listen(port, () => console.log(`Listening on port ${port}, next port ${nextPort}`));
