@@ -168,24 +168,16 @@ function AnswerLabel(props) {
   );
 }
 
-function changePort(port){
-  var portValue = parseInt(port);
-  portValue += (portValue === 65535) ? -1:1;
-  return portValue.toString();
-}
-
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
   const history = useHistory();
   
-  let socket = io(webSocketHost);
+  let socket = io();
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    console.log(webSocketHost)
     if (socket && room) socket.emit('join', room);
   }
 
@@ -204,6 +196,10 @@ export default function Board() {
       }
     })
   }
+
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
 
   const handleSetReload = () => {
     setReload(!reload);

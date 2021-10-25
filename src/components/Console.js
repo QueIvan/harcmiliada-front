@@ -7,16 +7,9 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
 import { useTheme } from "@mui/system";
 
-function changePort(port){
-  var portValue = parseInt(port);
-  portValue += (portValue === 65535) ? -1:1;
-  return portValue.toString();
-}
-
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const history = useHistory();
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
@@ -36,11 +29,10 @@ export default function Console() {
     })
   }
   
-  let socket = io(webSocketHost);
+  let socket = io();
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    console.log(webSocketHost)
     if (socket && room) socket.emit("join", room);
   };
 

@@ -8,15 +8,11 @@ function changePort(port){
   return portValue.toString();
 }
 
-console.log(process.env.PORT)
-
 const port = changePort(process.env.PORT);
 
 const app = express();
 
-const server = http.createServer(app);
-
-app.use(express.static(__dirname + '/../../build'));
+const server = http.createServer(app.use((req, res) => res.send("/public/index.html", {root: __dirname})));
 
 const io = socketIo(server, { cors: { orgin: "*" } });
 

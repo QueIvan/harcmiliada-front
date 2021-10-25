@@ -116,15 +116,8 @@ function Row(props) {
   );
 }
 
-function changePort(port){
-  var portValue = parseInt(port);
-  portValue += (portValue === 65535) ? -1:1;
-  return portValue.toString();
-}
-
 export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const [questions, setQuestions] = useState({});
   const history = useHistory();
   const [reload, setReload] = useState(false);
@@ -135,11 +128,10 @@ export default function Dashboard() {
 
   const crumbs = { past: [], current: "Pulpit" };
   
-  let socket = io(webSocketHost);
+  let socket = io();
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    console.log(webSocketHost)
     if (socket && room) socket.emit('join', room);
   }
 
