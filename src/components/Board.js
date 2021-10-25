@@ -10,6 +10,10 @@ import {
 } from "@mui/material";
 import { useHistory } from "react-router";
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const BackBox = styled(MuiBox)(({ theme }) => ({
   width: "100vw",
   height: "100vh",
@@ -69,9 +73,11 @@ const BodyTypography = styled(MuiTypography)(({ theme }) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
-  fontSize: "1rem",
   fontWeight: "bold",
   textShadow: "0px 0px 10px rgba(0, 82, 64, 1)",
+  "&:first-of-type": {
+    fontSize: "1rem",
+  }
 }));
 
 const IdTypography = styled(MuiTypography)(({ theme }) => ({
@@ -122,7 +128,7 @@ function AnswerContent(props) {
       }}
     >
       <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={10}>
-        <BodyTypography>{label}</BodyTypography>
+        <BodyTypography>{capitalizeFirstLetter(label)}</BodyTypography>
       </Grid>
       <Grid
         sx={{
