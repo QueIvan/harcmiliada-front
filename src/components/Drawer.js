@@ -177,7 +177,7 @@ export default function Drawer(content) {
     {
       label: "Przejdz do tablicy",
       icon: faChalkboard,
-      linkDest: "/harcmiliada-front",
+      linkDest: "/",
       toNew: true,
     },
   ];
