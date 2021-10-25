@@ -27,6 +27,9 @@ export default function ViewQuestion() {
   const formRef = useRef(null);
   const history = useHistory();
   const { id } = useParams();
+
+  const socket = io("https://harcmiliada-socket.herokuapp.com");
+
   const crumbs = {
     past: [{ path: "/dashboard", label: "Pulpit" }],
     current: "Kreator",
@@ -35,6 +38,16 @@ export default function ViewQuestion() {
   const handleClick = () => {
     formRef.current.requestSubmit();
   };
+
+  const initiateSocket = (room) => {
+    console.log(`Connecting socket...`);
+    if (socket && room) socket.emit('join', room);
+  }
+
+  const disconnectSocket = () => {
+    console.log('Disconnecting socket...');
+    if(socket) socket.disconnect();
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,7 +68,13 @@ export default function ViewQuestion() {
       method: id ? "PUT" : "POST",
       body: JSON.stringify(obj),
     })
-      .then(() => history.push("/dashboard"))
+      .then(() => {
+        socket.emit("sendCommand", "toggleQuestion", ["consoles"])
+        if(current){
+          socket.emit("sendCommand", "toggleQuestion", ["boards"])
+        }
+        history.push("/dashboard")
+      })
       .catch((err) => console.log(err));
   };
 
@@ -87,8 +106,15 @@ export default function ViewQuestion() {
         })
         .catch((err) => console.log(err));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    initiateSocket("viewer");
+
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    };
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <Drawer crumbs={crumbs}>
