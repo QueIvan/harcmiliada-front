@@ -56,7 +56,7 @@ export default function ViewQuestion() {
     let obj = {
       current: current,
       content: content,
-      answers: answers.filter((value) => Object.keys(value).length !== 0),
+      answers: answers.filter((value) => (Object.keys(value).length !== 0 && value.content !== "" && value.points !== null)),
     };
     if (id) {
       obj["id"] = id;
