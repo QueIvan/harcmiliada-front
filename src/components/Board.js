@@ -4,11 +4,9 @@ import io from "socket.io-client";
 import {
   Box as MuiBox,
   Grid,
-  Button,
   Grid as MuiGrid,
   Typography as MuiTypography,
-  Fade,
-  Box,
+  Fade
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
