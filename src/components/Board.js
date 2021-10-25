@@ -179,6 +179,7 @@ export default function Board() {
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
+    console.log(webSocketHost)
     if (socket && room) socket.emit('join', room);
   }
 

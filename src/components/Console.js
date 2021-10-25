@@ -34,6 +34,7 @@ export default function Console() {
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
+    console.log(webSocketHost)
     if (socket && room) socket.emit("join", room);
   };
 
