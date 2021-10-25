@@ -8,6 +8,8 @@ function changePort(port){
   return portValue.toString();
 }
 
+console.log(process.env.PORT)
+
 const port = changePort(process.env.PORT);
 
 const app = express();
