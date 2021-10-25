@@ -175,6 +175,7 @@ function changePort(port){
 }
 
 export default function Dashboard() {
+  console.log(process.env.PORT)
   const host = "https://harcmiliada.herokuapp.com/";
   const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + changePort(process.env.PORT);
   const [question, setQuestion] = useState({});
