@@ -174,7 +174,7 @@ export default function Board() {
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
-  let socket = io('/');
+  let socket = io('http://localhost:4001');
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
