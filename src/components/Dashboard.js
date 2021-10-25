@@ -127,8 +127,8 @@ function Row(props) {
 export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [questions, setQuestions] = useState({});
-  const history = useHistory();
   const [reload, setReload] = useState(false);
+  const history = useHistory();
 
   const handleSetReload = () => {
     setReload(!reload);
@@ -203,7 +203,9 @@ export default function Dashboard() {
 
         if(changed){
           setTimeout(()=>{
-            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles", "lists"])
+            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
+            history.push("/empty")
+            history.push("/dashboard")
           }, 500)
         }
 
