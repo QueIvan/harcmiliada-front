@@ -42,13 +42,13 @@ export default function ViewQuestion() {
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    if (socket && room) socket.emit('join', room);
-  }
+    if (socket && room) socket.emit("join", room);
+  };
 
   const disconnectSocket = () => {
-    console.log('Disconnecting socket...');
-    if(socket) socket.disconnect();
-  }
+    console.log("Disconnecting socket...");
+    if (socket) socket.disconnect();
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,7 +56,12 @@ export default function ViewQuestion() {
     let obj = {
       current: current,
       content: content,
-      answers: answers.filter((value) => (Object.keys(value).length !== 0 && value.content !== "" && value.points !== null)),
+      answers: answers.filter(
+        (value) =>
+          Object.keys(value).length !== 0 &&
+          value.content !== "" &&
+          value.points !== null
+      ),
     };
     if (id) {
       obj["id"] = id;
@@ -70,11 +75,11 @@ export default function ViewQuestion() {
       body: JSON.stringify(obj),
     })
       .then(() => {
-        socket.emit("sendCommand", "toggleQuestion", ["consoles"])
-        if(current){
-          socket.emit("sendCommand", "toggleQuestion", ["boards"])
+        socket.emit("sendCommand", "toggleQuestion", ["consoles"]);
+        if (current) {
+          socket.emit("sendCommand", "toggleQuestion", ["boards"]);
         }
-        history.push("/dashboard")
+        history.push("/dashboard");
       })
       .catch((err) => console.log(err));
   };

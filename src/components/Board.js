@@ -6,7 +6,7 @@ import {
   Grid,
   Grid as MuiGrid,
   Typography as MuiTypography,
-  Fade
+  Fade,
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -93,29 +93,28 @@ const IdTypography = styled(MuiTypography)(({ theme }) => ({
   boxShadow: "0px 0px 10px 0px #005240",
 }));
 
-const WrongBoxContainer = styled(MuiBox)(({theme}) => ({
+const WrongBoxContainer = styled(MuiBox)(({ theme }) => ({
   position: "absolute",
   display: "flex",
   gap: "50px",
   flexDirection: "column",
 }));
 
-const WrongBox = styled(MuiBox)(({theme}) => ({
+const WrongBox = styled(MuiBox)(({ theme }) => ({
   width: "100px",
   aspectRatio: "1",
   border: "10px solid",
   borderColor: theme.palette.done.main,
   color: theme.palette.done.main,
   borderRadius: "5px",
-  boxShadow:
-    "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
+  boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   overflow: "hidden",
   "&>*": {
-    textShadow: "0px 0px 10px #7c7c7c"
-  }
+    textShadow: "0px 0px 10px #7c7c7c",
+  },
 }));
 
 function AnswerBox(props) {
@@ -204,7 +203,7 @@ function AnswerLabel(props) {
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
-  const [sideCounter, setSideCounter] = useState([0,0]);
+  const [sideCounter, setSideCounter] = useState([0, 0]);
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
@@ -228,7 +227,7 @@ export default function Board() {
         history.push("/empty");
         history.push("/");
       } else if (data.type === "wrong") {
-        setSideCounter(data.counter)
+        setSideCounter(data.counter);
       }
     });
   };
@@ -263,60 +262,73 @@ export default function Board() {
           </HeaderContent>
         </GridHeader>
         <GridBody item container>
-        {Array.from(Array(5).keys()).map((el) => {
-          return (<GridRow item container>
-              {question.answers && question.answers.length > el ? (
+          {Array.from(Array(5).keys()).map((el) => {
+            return (
+              <GridRow item container>
+                {question.answers && question.answers.length > el ? (
                   <AnswerBox
-                  id={question.answers[el].id}
-                  visibleId={el+1}
-                  checked={question.answers[el].checked}
+                    id={question.answers[el].id}
+                    visibleId={el + 1}
+                    checked={question.answers[el].checked}
                   >
-                  <AnswerContent
+                    <AnswerContent
                       value={question.answers[el].points}
                       checked={question.answers[el].checked}
-                  >
+                    >
                       {question.answers[el].content}
-                  </AnswerContent>
+                    </AnswerContent>
                   </AnswerBox>
-              ) : (
+                ) : (
                   <AnswerBox />
-              )}
-              {question.answers && question.answers.length > el+5 ? (
+                )}
+                {question.answers && question.answers.length > el + 5 ? (
                   <AnswerBox
-                  id={question.answers[el+5].id}
-                  visibleId={el+6}
-                  checked={question.answers[el+5].checked}
+                    id={question.answers[el + 5].id}
+                    visibleId={el + 6}
+                    checked={question.answers[el + 5].checked}
                   >
-                  <AnswerContent
-                      value={question.answers[el+5].points}
-                      checked={question.answers[el+5].checked}
-                  >
-                      {question.answers[el+5].content}
-                  </AnswerContent>
+                    <AnswerContent
+                      value={question.answers[el + 5].points}
+                      checked={question.answers[el + 5].checked}
+                    >
+                      {question.answers[el + 5].content}
+                    </AnswerContent>
                   </AnswerBox>
-              ) : (
+                ) : (
                   <AnswerBox />
-              )}
-          </GridRow>)
-        })};
+                )}
+              </GridRow>
+            );
+          })}
+          ;
         </GridBody>
       </GridOuterContainer>
-      <WrongBoxContainer sx={{left: "50px"}}>
+      <WrongBoxContainer sx={{ left: "50px" }}>
         {[...Array(sideCounter[0])].map(() => {
           return (
-            <WrongBox sx={{aspectRatio: (sideCounter[1] === 3 && sideCounter[0] === 1) ? ".25": "1"}}>
+            <WrongBox
+              sx={{
+                aspectRatio:
+                  sideCounter[1] === 3 && sideCounter[0] === 1 ? ".25" : "1",
+              }}
+            >
               <FontAwesomeIcon size="6x" icon={faTimes} />
             </WrongBox>
-            )
+          );
         })}
       </WrongBoxContainer>
-      <WrongBoxContainer sx={{right: "50px"}}>
+      <WrongBoxContainer sx={{ right: "50px" }}>
         {[...Array(sideCounter[1])].map(() => {
           return (
-            <WrongBox sx={{aspectRatio: (sideCounter[0] === 3 && sideCounter[1] === 1) ? ".25": "1"}}>
+            <WrongBox
+              sx={{
+                aspectRatio:
+                  sideCounter[0] === 3 && sideCounter[1] === 1 ? ".25" : "1",
+              }}
+            >
               <FontAwesomeIcon size="6x" icon={faTimes} />
             </WrongBox>
-            )
+          );
         })}
       </WrongBoxContainer>
     </BackBox>

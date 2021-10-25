@@ -132,7 +132,7 @@ export default function Dashboard() {
 
   const handleSetReload = () => {
     setReload(!reload);
-  }
+  };
 
   const crumbs = { past: [], current: "Pulpit" };
 
@@ -140,13 +140,13 @@ export default function Dashboard() {
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    if (socket && room) socket.emit('join', room);
-  }
+    if (socket && room) socket.emit("join", room);
+  };
 
   const disconnectSocket = () => {
-    console.log('Disconnecting socket...');
-    if(socket) socket.disconnect();
-  }
+    console.log("Disconnecting socket...");
+    if (socket) socket.disconnect();
+  };
 
   function moveToCreator() {
     history.push("/dashboard/add");
@@ -168,47 +168,48 @@ export default function Dashboard() {
   }
 
   const listenForCommands = () => {
-    socket.on('recieveCommand', (data) => {
-      handleSetReload()
-    })
-  }
+    socket.on("recieveCommand", (data) => {
+      handleSetReload();
+    });
+  };
 
   function changeCurrentQuestion(id) {
     fetch("https://harcmiliada.herokuapp.com/questions/current/" + id, {
       method: "PUT",
     })
       .then(() => {
-        socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
+        socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"]);
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
       })
       .catch((err) => console.log(err));
   }
 
-  function clearShownQuestions(id){
+  function clearShownQuestions(id) {
     fetch(host + "questions/current")
       .then((response) => response.json())
       .then((json) => {
-
         let changed = false;
 
         json.answers.forEach((el) => {
-          if(el.checked){
+          if (el.checked) {
             changed = true;
             fetch(host + "questions/answers/" + el.id, {
               method: "PUT",
-            }).catch((err) => console.log(err))
+            }).catch((err) => console.log(err));
           }
         });
 
-        if(changed){
-          setTimeout(()=>{
-            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
-            history.push("/empty")
-            history.push("/dashboard")
-          }, 500)
+        if (changed) {
+          setTimeout(() => {
+            socket.emit("sendCommand", "toggleQuestion", [
+              "boards",
+              "consoles",
+            ]);
+            history.push("/empty");
+            history.push("/dashboard");
+          }, 500);
         }
-
       })
       .catch((err) => console.log(err));
   }
@@ -238,13 +239,13 @@ export default function Dashboard() {
       })
       .catch((err) => console.log(err));
 
-      initiateSocket("lists");
-  
-      listenForCommands();
-  
-      return () => {
-        disconnectSocket();
-      }
+    initiateSocket("lists");
+
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    };
   }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

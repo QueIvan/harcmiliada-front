@@ -197,7 +197,9 @@ export default function Drawer(content) {
   };
 
   const handleLogin = () => {
-    loginWithRedirect({redirectUri: "https://harcmiliada.netlify.app/dashboard" });
+    loginWithRedirect({
+      redirectUri: "https://harcmiliada.netlify.app/dashboard",
+    });
   };
 
   const handleLogOut = () => {
@@ -261,7 +263,8 @@ export default function Drawer(content) {
               >
                 <StyledLink
                   sx={{
-                    pointerEvents: !content.loggedout || obj.toNew ? "auto" : "none",
+                    pointerEvents:
+                      !content.loggedout || obj.toNew ? "auto" : "none",
                     cursor: "pointer",
                   }}
                   onClick={() =>
