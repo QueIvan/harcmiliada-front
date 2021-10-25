@@ -1,4 +1,4 @@
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Board from "./components/Board";
 import Dashboard from "./components/Dashboard";

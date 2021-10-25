@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
-import io from 'socket.io-client';
 import {
   Box as MuiBox,
   Grid,
@@ -8,7 +7,6 @@ import {
   Typography as MuiTypography,
   Fade,
 } from "@mui/material";
-import { useHistory } from "react-router";
 
 const BackBox = styled(MuiBox)(({ theme }) => ({
   width: "100vw",
@@ -171,39 +169,7 @@ function AnswerLabel(props) {
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
-  const [reload, setReload] = useState(false);
-  const history = useHistory();
-  
-  let socket = io("ws://harcmiliada-front.herokuapp.com");
-
-  const initiateSocket = (room) => {
-    console.log(`Connecting socket...`);
-    if (socket && room) socket.emit('join', room);
-  }
-
-  const disconnectSocket = () => {
-    console.log('Disconnecting socket...');
-    if(socket) socket.disconnect();
-  }
-
-  const listenForCommands = () => {
-    socket.on('recieveCommand', (data) => {
-      if(data === "toggleAnswer"){
-        handleSetReload();
-      }else if(data === "toggleQuestion"){
-        history.push("/empty")
-        history.push("/")
-      }
-    })
-  }
-
-  socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
-  });
-
-  const handleSetReload = () => {
-    setReload(!reload);
-  }
+  const [reload] = useState(false);
 
   useEffect(() => {
 
@@ -213,14 +179,6 @@ export default function Board() {
         setQuestion(json);
       })
       .catch((err) => console.log(err));
-
-    initiateSocket("boards");
-
-    listenForCommands();
-
-    return () => {
-      disconnectSocket();
-    }
 
   }, [reload]);
 
