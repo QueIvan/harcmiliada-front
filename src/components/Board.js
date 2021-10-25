@@ -264,7 +264,7 @@ export default function Board() {
         <GridBody item container>
           {Array.from(Array(5).keys()).map((el) => {
             return (
-              <GridRow item container>
+              <GridRow item container key={el}>
                 {question.answers && question.answers.length > el ? (
                   <AnswerBox
                     id={question.answers[el].id}
