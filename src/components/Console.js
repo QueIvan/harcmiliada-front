@@ -1,17 +1,66 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Tooltip } from "@mui/material";
+import { Grid, Typography, Tooltip,
+  Box as MuiBox, Box } from "@mui/material";
 import Drawer from "./Drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
-import { useTheme } from "@mui/system";
+import { styled, useTheme } from "@mui/material/styles";
 import io from "socket.io-client";
+
+const WrongBoxContainer = styled(MuiBox)(({theme}) => ({
+  display: "flex",
+  gap: "50px",
+  flexDirection: "row",
+  justifyContent: "center"
+}));
+
+const WrongBox = styled(MuiBox)(({theme}) => ({
+  width: "40px",
+  height: "40px",
+  border: "2.5px solid",
+  borderRadius: "5px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  overflow: "hidden",
+  cursor: "pointer",
+  transition: "0.25s ease-out",
+  "&>*": {
+    textShadow: "0px 0px 10px #7c7c7c"
+  },
+}));
+
+function Wrong(props){
+  const theme = useTheme();
+  const checked = props.checked;
+  const clickHandler = props.clickHandler;
+
+  return (
+    <WrongBox
+      onClick={clickHandler}
+      sx={{
+        borderColor: (checked) ? theme.palette.done.main : theme.palette.available.main,
+        color: (checked) ? theme.palette.done.main : theme.palette.available.main,
+        boxShadow: (checked) ?
+          "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c":"",
+        "&:hover": {
+          borderColor: (checked) ? theme.palette.done.main : theme.palette.done.backDrop,
+          color: (checked) ? theme.palette.done.main : theme.palette.done.backDrop,
+          boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
+        }
+      }}>
+      <FontAwesomeIcon size="2x" icon={faTimes} />
+    </WrongBox>
+  )
+}
 
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
   const history = useHistory();
   const [question, setQuestion] = useState({});
+  const [checked, setChecked] = useState([false, false, false, false, false, false])
   const [reload, setReload] = useState(false);
 
   const socket = io("https://harcmiliada-socket.herokuapp.com");
@@ -59,6 +108,8 @@ export default function Console() {
 
 
   useEffect(() => {
+    setChecked([false, false, false, false, false, false])
+
     fetch(host + "questions/current")
       .then((response) => response.json())
       .then((json) => {
@@ -69,12 +120,38 @@ export default function Console() {
       initiateSocket("consoles");
   
       listenForCommands();
+
+      socket.emit("sendCommand", {type: "wrong", counter: [0,0]}, ["boards"]);
   
       return () => {
         disconnectSocket();
       };
 
   }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCounterAddition = (checks) => {
+    let sideCounter = [0,0];
+    checks.forEach((el, key) => {
+      if(key < 3){
+        if(el){
+          sideCounter[0]++;
+        }
+      }else{
+        if(el){
+          sideCounter[1]++;
+        }
+      }
+    })
+
+    socket.emit("sendCommand", {type: "wrong", counter: sideCounter}, ["boards"]);
+  }
+
+  const checkedHandler = (id, side) => {
+    let checks = [...checked];
+    checks[id] = !checks[id];
+    setChecked(checks);
+    handleCounterAddition(checks);
+  }
 
   return (
     <Drawer crumbs={crumbs}>
@@ -91,7 +168,7 @@ export default function Console() {
           <Grid
             item
             xs={12}
-            sx={{ textAlign: "center", marginBottom: "1.25rem" }}
+            sx={{ textAlign: "center", marginBottom: ".75rem" }}
           >
             <Tooltip
               title={
@@ -117,6 +194,78 @@ export default function Console() {
                 Panel kontrolny tablicy
               </Typography>
             </Tooltip>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ textAlign: "center", marginBottom: ".75rem", paddingBottom: ".25rem", borderBottom: "1px solid rgba(224, 224, 224, 1)" }}
+          >
+            <Typography
+              sx={{
+                fontVariant: "small-caps",
+                fontSize: "1.15rem",
+                marginBottom: ".25rem",
+                fontWeight: "550"
+              }}
+            >
+              Kontroler błędnych odpowiedzi
+            </Typography>
+          </Grid>
+          <Grid container sx={{marginBottom: "1.25rem", justifyContent: "center", gap: "50px" }}>
+            <Grid item xs={3}>
+              <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Typography
+                  sx={{
+                    fontVariant: "small-caps",
+                    fontSize: "1.05rem",
+                    marginBottom: ".5rem",
+                    textAlign: "center"
+                  }}
+                >
+                  Strona lewa
+                </Typography>
+                <WrongBoxContainer>
+                  <Wrong checked={checked[0]} clickHandler={() => checkedHandler(0,0)}/>
+                  <Wrong checked={checked[1]} clickHandler={() => checkedHandler(1,0)}/>
+                  <Wrong checked={checked[2]} clickHandler={() => checkedHandler(2,0)}/>
+                </WrongBoxContainer>
+              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Typography
+                  sx={{
+                    fontVariant: "small-caps",
+                    fontSize: "1.05rem",
+                    marginBottom: ".5rem",
+                    textAlign: "center"
+                  }}
+                >
+                  Strona prawa
+                </Typography>
+                <WrongBoxContainer>
+                  <Wrong checked={checked[3]} clickHandler={() => checkedHandler(3,1)}/>
+                  <Wrong checked={checked[4]} clickHandler={() => checkedHandler(4,1)}/>
+                  <Wrong checked={checked[5]} clickHandler={() => checkedHandler(5,1)}/>
+                </WrongBoxContainer>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ textAlign: "center", marginBottom: "1.75rem", paddingBottom: ".25rem", borderBottom: "1px solid rgba(224, 224, 224, 1)" }}
+          >
+            <Typography
+              sx={{
+                fontVariant: "small-caps",
+                fontSize: "1.15rem",
+                marginBottom: ".25rem",
+                fontWeight: "550"
+              }}
+            >
+              Kontroler wyświetlania pytań
+            </Typography>
           </Grid>
           <Grid container sx={{ display: "flex", justifyContent: "center" }}>
             {question.answers

@@ -4,11 +4,15 @@ import io from "socket.io-client";
 import {
   Box as MuiBox,
   Grid,
+  Button,
   Grid as MuiGrid,
   Typography as MuiTypography,
   Fade,
+  Box,
 } from "@mui/material";
 import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -91,6 +95,31 @@ const IdTypography = styled(MuiTypography)(({ theme }) => ({
   boxShadow: "0px 0px 10px 0px #005240",
 }));
 
+const WrongBoxContainer = styled(MuiBox)(({theme}) => ({
+  position: "absolute",
+  display: "flex",
+  gap: "50px",
+  flexDirection: "column",
+}));
+
+const WrongBox = styled(MuiBox)(({theme}) => ({
+  width: "100px",
+  aspectRatio: "1",
+  border: "10px solid",
+  borderColor: theme.palette.done.main,
+  color: theme.palette.done.main,
+  borderRadius: "5px",
+  boxShadow:
+    "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  overflow: "hidden",
+  "&>*": {
+    textShadow: "0px 0px 10px #7c7c7c"
+  }
+}));
+
 function AnswerBox(props) {
   const label = props.children;
   const checked = props.checked;
@@ -125,7 +154,9 @@ function AnswerContent(props) {
       }}
     >
       <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={10}>
-        <BodyTypography sx={{fontSize: "1.35rem"}}>{capitalizeFirstLetter(label)}</BodyTypography>
+        <BodyTypography sx={{ fontSize: "1.35rem" }}>
+          {capitalizeFirstLetter(label)}
+        </BodyTypography>
       </Grid>
       <Grid
         sx={{
@@ -175,6 +206,7 @@ function AnswerLabel(props) {
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
+  const [sideCounter, setSideCounter] = useState([0,0]);
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
@@ -182,31 +214,32 @@ export default function Board() {
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
-    if (socket && room) socket.emit('join', room);
-  }
+    if (socket && room) socket.emit("join", room);
+  };
 
   const disconnectSocket = () => {
-    console.log('Disconnecting socket...');
-    if(socket) socket.disconnect();
-  }
+    console.log("Disconnecting socket...");
+    if (socket) socket.disconnect();
+  };
 
   const listenForCommands = () => {
-    socket.on('recieveCommand', (data) => {
-      if(data === "toggleAnswer"){
+    socket.on("recieveCommand", (data) => {
+      if (data === "toggleAnswer") {
         handleSetReload();
-      }else if(data === "toggleQuestion"){
-        history.push("/empty")
-        history.push("/")
+      } else if (data === "toggleQuestion") {
+        history.push("/empty");
+        history.push("/");
+      } else if (data.type === "wrong") {
+        setSideCounter(data.counter)
       }
-    })
-  }
+    });
+  };
 
   const handleSetReload = () => {
     setReload(!reload);
-  }
+  };
 
   useEffect(() => {
-
     fetch(host + "questions/current")
       .then((response) => response.json())
       .then((json) => {
@@ -214,14 +247,13 @@ export default function Board() {
       })
       .catch((err) => console.log(err));
 
-      initiateSocket("boards");
-  
-      listenForCommands();
-  
-      return () => {
-        disconnectSocket();
-      }
+    initiateSocket("boards");
 
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    };
   }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -405,6 +437,24 @@ export default function Board() {
           </GridRow>
         </GridBody>
       </GridOuterContainer>
+      <WrongBoxContainer sx={{left: "50px"}}>
+        {[...Array(sideCounter[0])].map(() => {
+          return (
+            <WrongBox sx={{aspectRatio: (sideCounter[1] === 3 && sideCounter[0] === 1) ? ".25": "1"}}>
+              <FontAwesomeIcon size="6x" icon={faTimes} />
+            </WrongBox>
+            )
+        })}
+      </WrongBoxContainer>
+      <WrongBoxContainer sx={{right: "50px"}}>
+        {[...Array(sideCounter[1])].map(() => {
+          return (
+            <WrongBox sx={{aspectRatio: (sideCounter[0] === 3 && sideCounter[1] === 1) ? ".25": "1"}}>
+              <FontAwesomeIcon size="6x" icon={faTimes} />
+            </WrongBox>
+            )
+        })}
+      </WrongBoxContainer>
     </BackBox>
   );
 }
