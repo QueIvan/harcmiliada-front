@@ -113,7 +113,7 @@ export default function ViewQuestion() {
     return () => {
       disconnectSocket();
     };
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Drawer crumbs={crumbs}>
