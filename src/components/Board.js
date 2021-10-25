@@ -174,7 +174,7 @@ export default function Board() {
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
-  let socket = io('https://harcmiliada-websocket.herokuapp.com:55374');
+  let socket = io('/');
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);

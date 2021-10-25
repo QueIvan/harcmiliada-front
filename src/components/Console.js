@@ -29,7 +29,7 @@ export default function Console() {
     })
   }
 
-  let socket = io('https://harcmiliada-websocket.herokuapp.com:55374');
+  let socket = io('/');
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
