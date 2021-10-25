@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 
-const port = process.env.PORT;
+const port = (parseInt(process.env.PORT)+1).toString();
 
 const app = express();
 
@@ -32,7 +32,4 @@ io.on("connect", (socket) => {
     });
 
 });
-
-const nextPort = (parseInt(port)+1).toString();
-
 server.listen(port, () => console.log(`Listening on port ${port}, next port ${nextPort}`));

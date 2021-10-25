@@ -118,7 +118,7 @@ function Row(props) {
 
 export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + process.env.PORT;
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT)+1).toString();
   const [questions, setQuestions] = useState({});
   const history = useHistory();
   const [reload, setReload] = useState(false);

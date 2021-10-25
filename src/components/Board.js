@@ -170,7 +170,7 @@ function AnswerLabel(props) {
 
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + process.env.PORT;
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT)+1).toString();
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
   const history = useHistory();
