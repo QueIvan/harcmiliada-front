@@ -14,6 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBroom,
   faEdit,
   faPlusSquare,
   faTrashAlt,
@@ -74,6 +75,7 @@ function Row(props) {
   const currentHandle = props.currentHandle;
   const editHandle = props.editHandle;
   const deleteHandle = props.deleteHandle;
+  const clearHandle = props.clearHandle;
 
   return (
     <TableRow key={row.id}>
@@ -110,6 +112,11 @@ function Row(props) {
         <Tooltip title="Usuń" arrow placement="bottom">
           <IconButton onClick={() => deleteHandle(row.id)}>
             <FontAwesomeIcon size="xs" icon={faTrashAlt} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Wyczyść stan pytań" arrow placement="bottom">
+          <IconButton onClick={() => clearHandle(row.id)}>
+            <FontAwesomeIcon size="xs" icon={faBroom} />
           </IconButton>
         </Tooltip>
       </TableCell>
@@ -174,6 +181,32 @@ export default function Dashboard() {
         socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function clearShownQuestions(id){
+    fetch(host + "questions/current")
+      .then((response) => response.json())
+      .then((json) => {
+
+        let changed = false;
+
+        json.answers.forEach((el) => {
+          if(el.checked){
+            changed = true;
+            fetch(host + "questions/answers/" + el.id, {
+              method: "PUT",
+            }).catch((err) => console.log(err))
+          }
+        });
+
+        if(changed){
+          setTimeout(()=>{
+            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
+          }, 500)
+        }
+
       })
       .catch((err) => console.log(err));
   }
@@ -252,6 +285,7 @@ export default function Dashboard() {
                       editHandle={moveToViewer}
                       deleteHandle={deleteQuestion}
                       currentHandle={changeCurrentQuestion}
+                      clearHandle={clearShownQuestions}
                       key={key}
                       data={question}
                     />
