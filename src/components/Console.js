@@ -4,7 +4,6 @@ import { Grid, Typography, Tooltip,
 import Drawer from "./Drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router";
 import { styled, useTheme } from "@mui/material/styles";
 import io from "socket.io-client";
 
@@ -58,7 +57,6 @@ function Wrong(props){
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
-  const history = useHistory();
   const [question, setQuestion] = useState({});
   const [checked, setChecked] = useState([false, false, false, false, false, false])
   const [reload, setReload] = useState(false);
@@ -94,18 +92,26 @@ export default function Console() {
     socket.emit("sendCommand", type, ["boards", "lists"]);
   };
 
+  const toggleAnswer = (id) => {
+    let dummy = {...question}
+    dummy.answers.forEach((el)=>{
+      if(el.id === id){
+        el.checked = !el.checked
+      }
+    });
+    setQuestion(dummy);
+  }
+
   const toggleChecked = (id, commandType) => {
     fetch("https://harcmiliada.herokuapp.com/questions/answers/" + id, {
       method: "PUT",
     })
       .then(() => {
         sendCommand(commandType);
-        history.push({ pathname: "/empty" });
-        history.replace({ pathname: "/dashboard/console" });
+        toggleAnswer(id);
       })
       .catch((err) => console.log(err));
   };
-
 
   useEffect(() => {
     setChecked([false, false, false, false, false, false])
