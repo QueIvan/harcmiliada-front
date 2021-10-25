@@ -6,6 +6,7 @@ import Drawer from "./Drawer";
 import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 
 export default function ViewQuestion() {
   const host = "https://harcmiliada.herokuapp.com/";
@@ -108,8 +109,6 @@ export default function ViewQuestion() {
     }
 
     initiateSocket("viewer");
-
-    listenForCommands();
 
     return () => {
       disconnectSocket();
