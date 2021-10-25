@@ -128,6 +128,9 @@ export default function Console() {
   };
 
   useEffect(() => {
+
+    document.title = 'Harcmiliada | Panel Sterowania';
+
     setChecked([false, false, false, false, false, false]);
 
     fetch(host + "questions/current")

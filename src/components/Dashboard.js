@@ -232,6 +232,9 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
+
+    document.title = 'Harcmiliada | Pulpit';
+
     fetch(host + "questions")
       .then((response) => response.json())
       .then((json) => {

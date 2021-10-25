@@ -97,6 +97,9 @@ export default function ViewQuestion() {
   };
 
   useEffect(() => {
+
+    document.title = 'Harcmiliada | Kreator';
+
     if (id) {
       fetch(host + "questions/" + id)
         .then((response) => response.json())
