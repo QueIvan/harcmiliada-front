@@ -118,6 +118,7 @@ function Row(props) {
 
 export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT) + 1);
   const [questions, setQuestions] = useState({});
   const history = useHistory();
   const [reload, setReload] = useState(false);
@@ -128,7 +129,7 @@ export default function Dashboard() {
 
   const crumbs = { past: [], current: "Pulpit" };
   
-  let socket = io("https://"+window.location.hostname + ":" + (parseInt(process.env.PORT) + 1));
+  let socket = io(webSocketHost);
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);

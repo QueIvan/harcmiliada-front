@@ -170,11 +170,12 @@ function AnswerLabel(props) {
 
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT) + 1);
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
   const history = useHistory();
   
-  let socket = io("https://"+window.location.hostname + ":" + (parseInt(process.env.PORT) + 1 ));
+  let socket = io(webSocketHost);
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);

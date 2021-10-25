@@ -10,6 +10,7 @@ import { useTheme } from "@mui/system";
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
+  const webSocketHost = "https://harcmiliada-front.herokuapp.com:" + (parseInt(process.env.PORT) + 1);
   const history = useHistory();
   const [question, setQuestion] = useState({});
   const [reload, setReload] = useState(false);
@@ -29,7 +30,7 @@ export default function Console() {
     })
   }
   
-  let socket = io("https://"+window.location.hostname + ":" + (parseInt(process.env.PORT) + 1 ));
+  let socket = io(webSocketHost);
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
