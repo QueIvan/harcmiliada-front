@@ -201,7 +201,7 @@ export default function Drawer(content) {
   };
 
   const handleLogOut = () => {
-    logout({ returnTo: "https://ivanplease.github.io/harcmiliada-front/#/dashboard" });
+    logout({ returnTo: "https://harcmiliada.netlify.app/dashboard" });
   };
 
   const handleMove = (dest, toNew) => {
