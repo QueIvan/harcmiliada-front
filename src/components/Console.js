@@ -28,8 +28,8 @@ export default function Console() {
       handleSetReload()
     })
   }
-
-  let socket = io('http://localhost:4001');
+  
+  let socket = io("http://"+window.location.hostname + ":" + (process.env.PORT || 4001));
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);

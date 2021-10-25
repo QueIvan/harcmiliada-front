@@ -128,7 +128,9 @@ export default function Dashboard() {
 
   const crumbs = { past: [], current: "Pulpit" };
 
-  let socket = io('http://localhost:4001');
+  console.log("http://"+window.location.hostname + ":" + (process.env.PORT || 4001))
+  
+  let socket = io("http://"+window.location.hostname + ":" + (process.env.PORT || 4001));
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
