@@ -55,6 +55,7 @@ const TypeBadge = styled("div")(({ theme, ...props }) => ({
       ? theme.palette.done.backDrop
       : theme.palette.shown.backDrop),
   "&:after": {
+    fontVariant: "small-caps",
     content:
       "'" +
       capitalizeFirstLetter(

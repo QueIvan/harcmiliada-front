@@ -75,9 +75,6 @@ const BodyTypography = styled(MuiTypography)(({ theme }) => ({
   transform: "translate(-50%,-50%)",
   fontWeight: "bold",
   textShadow: "0px 0px 10px rgba(0, 82, 64, 1)",
-  "&:first-of-type": {
-    fontSize: "1rem",
-  }
 }));
 
 const IdTypography = styled(MuiTypography)(({ theme }) => ({
@@ -128,7 +125,7 @@ function AnswerContent(props) {
       }}
     >
       <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={10}>
-        <BodyTypography>{capitalizeFirstLetter(label)}</BodyTypography>
+        <BodyTypography sx={{fontSize: "1.35rem"}}>{capitalizeFirstLetter(label)}</BodyTypography>
       </Grid>
       <Grid
         sx={{
