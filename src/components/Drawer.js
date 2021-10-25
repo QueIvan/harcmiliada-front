@@ -197,7 +197,7 @@ export default function Drawer(content) {
   };
 
   const handleLogin = () => {
-    loginWithRedirect();
+    loginWithRedirect({redirectUri: "https://harcmiliada.netlify.app/dashboard"});
   };
 
   const handleLogOut = () => {
