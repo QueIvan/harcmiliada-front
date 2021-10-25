@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import io from 'socket.io-client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -119,7 +120,25 @@ export default function Dashboard() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [questions, setQuestions] = useState({});
   const history = useHistory();
+  const [reload, setReload] = useState(false);
+
+  const handleSetReload = () => {
+    setReload(!reload);
+  }
+
   const crumbs = { past: [], current: "Pulpit" };
+
+  let socket = io('http://localhost:4001');
+
+  const initiateSocket = (room) => {
+    console.log(`Connecting socket...`);
+    if (socket && room) socket.emit('join', room);
+  }
+
+  const disconnectSocket = () => {
+    console.log('Disconnecting socket...');
+    if(socket) socket.disconnect();
+  }
 
   function moveToCreator() {
     history.push("/dashboard/add");
@@ -140,11 +159,18 @@ export default function Dashboard() {
       .catch((err) => console.log(err));
   }
 
+  const listenForCommands = () => {
+    socket.on('recieveCommand', (data) => {
+      handleSetReload()
+    })
+  }
+
   function changeCurrentQuestion(id) {
     fetch("https://harcmiliada.herokuapp.com/questions/current/" + id, {
       method: "PUT",
     })
       .then(() => {
+        socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
       })
@@ -175,7 +201,15 @@ export default function Dashboard() {
         setQuestions(json);
       })
       .catch((err) => console.log(err));
-  }, []);
+
+    initiateSocket("lists");
+
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    }
+  }, [reload]);
 
   return (
     <Drawer crumbs={crumbs}>

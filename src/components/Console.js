@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Tooltip } from "@mui/material";
 import Drawer from "./Drawer";
+import io from "socket.io-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
@@ -11,17 +12,45 @@ export default function Console() {
   const host = "https://harcmiliada.herokuapp.com/";
   const history = useHistory();
   const [question, setQuestion] = useState({});
-  const [reload] = useState(false);
+  const [reload, setReload] = useState(false);
+
+  const handleSetReload = () => {
+    setReload(!reload);
+  }
+
   const crumbs = {
     past: [{ path: "/dashboard", label: "Pulpit" }],
     current: "Konsola kontrolna",
   };
 
-  const toggleChecked = (id) => {
+  const listenForCommands = () => {
+    socket.on('recieveCommand', (data) => {
+      handleSetReload()
+    })
+  }
+
+  let socket = io("http://localhost:4001");
+
+  const initiateSocket = (room) => {
+    console.log(`Connecting socket...`);
+    if (socket && room) socket.emit("join", room);
+  };
+
+  const disconnectSocket = () => {
+    console.log("Disconnecting socket...");
+    if (socket) socket.disconnect();
+  };
+
+  const sendCommand = (type) => {
+    socket.emit("sendCommand", type, ["boards", "lists"]);
+  };
+
+  const toggleChecked = (id, commandType) => {
     fetch("https://harcmiliada.herokuapp.com/questions/answers/" + id, {
       method: "PUT",
     })
       .then(() => {
+        sendCommand(commandType);
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard/console" });
       })
@@ -35,6 +64,14 @@ export default function Console() {
         setQuestion(json);
       })
       .catch((err) => console.log(err));
+
+    initiateSocket("consoles");
+
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    };
   }, [reload]);
 
   return (
@@ -82,7 +119,7 @@ export default function Console() {
           <Grid container sx={{ display: "flex", justifyContent: "center" }}>
             {question.answers
               ? question.answers.length > 0
-                ? question.answers.map((row) => {
+                ? question.answers.map((row, key) => {
                     return (
                       <Grid
                         item
@@ -102,7 +139,12 @@ export default function Console() {
                             backgroundColor: "#e5e5e5",
                           },
                         }}
-                        onClick={() => toggleChecked(row.id)}
+                        onClick={() =>
+                          toggleChecked(
+                            row.id,
+                            "toggleAnswer"
+                          )
+                        }
                       >
                         <Tooltip
                           title={"Ilość punktów: " + row.points}

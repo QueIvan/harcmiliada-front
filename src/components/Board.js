@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
+import io from 'socket.io-client';
 import {
   Box as MuiBox,
   Grid,
@@ -7,6 +8,7 @@ import {
   Typography as MuiTypography,
   Fade,
 } from "@mui/material";
+import { useHistory } from "react-router";
 
 const BackBox = styled(MuiBox)(({ theme }) => ({
   width: "100vw",
@@ -61,11 +63,12 @@ const BodyContent = styled(MuiGrid)(({ theme }) => ({
 }));
 
 const BodyTypography = styled(MuiTypography)(({ theme }) => ({
+  width: "90%",
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
-  fontSize: "1.25rem",
+  fontSize: "1rem",
   fontWeight: "bold",
   textShadow: "0px 0px 10px rgba(0, 82, 64, 1)",
 }));
@@ -167,21 +170,54 @@ function AnswerLabel(props) {
 
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
-  const [checked, setChecked] = useState([]);
   const [question, setQuestion] = useState({});
-  const [reload] = useState(false);
+  const [reload, setReload] = useState(false);
+  const history = useHistory();
+
+  let socket = io('http://localhost:4001');
+
+  const initiateSocket = (room) => {
+    console.log(`Connecting socket...`);
+    if (socket && room) socket.emit('join', room);
+  }
+
+  const disconnectSocket = () => {
+    console.log('Disconnecting socket...');
+    if(socket) socket.disconnect();
+  }
+
+  const listenForCommands = () => {
+    socket.on('recieveCommand', (data) => {
+      if(data === "toggleAnswer"){
+        handleSetReload();
+      }else if(data === "toggleQuestion"){
+        history.push("/empty")
+        history.push("/")
+      }
+    })
+  }
+
+  const handleSetReload = () => {
+    setReload(!reload);
+  }
 
   useEffect(() => {
+
     fetch(host + "questions/current")
       .then((response) => response.json())
       .then((json) => {
         setQuestion(json);
-        let checks = json.answers.map((a) => {
-          return a.checked;
-        });
-        setChecked(checks);
       })
       .catch((err) => console.log(err));
+
+    initiateSocket("boards");
+
+    listenForCommands();
+
+    return () => {
+      disconnectSocket();
+    }
+
   }, [reload]);
 
   return (
@@ -198,11 +234,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[0].id}
                 visibleId={1}
-                checked={checked[0]}
+                checked={question.answers[0].checked}
               >
                 <AnswerContent
                   value={question.answers[0].points}
-                  checked={checked[0]}
+                  checked={question.answers[0].checked}
                 >
                   {question.answers[0].content}
                 </AnswerContent>
@@ -214,11 +250,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[5].id}
                 visibleId={6}
-                checked={checked[5]}
+                checked={question.answers[5].checked}
               >
                 <AnswerContent
                   value={question.answers[5].points}
-                  checked={checked[5]}
+                  checked={question.answers[5].checked}
                 >
                   {question.answers[5].content}
                 </AnswerContent>
@@ -232,11 +268,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[1].id}
                 visibleId={2}
-                checked={checked[1]}
+                checked={question.answers[1].checked}
               >
                 <AnswerContent
                   value={question.answers[1].points}
-                  checked={checked[1]}
+                  checked={question.answers[1].checked}
                 >
                   {question.answers[1].content}
                 </AnswerContent>
@@ -248,11 +284,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[6].id}
                 visibleId={7}
-                checked={checked[6]}
+                checked={question.answers[6].checked}
               >
                 <AnswerContent
                   value={question.answers[6].points}
-                  checked={checked[6]}
+                  checked={question.answers[6].checked}
                 >
                   {question.answers[6].content}
                 </AnswerContent>
@@ -266,11 +302,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[2].id}
                 visibleId={3}
-                checked={checked[2]}
+                checked={question.answers[2].checked}
               >
                 <AnswerContent
                   value={question.answers[2].points}
-                  checked={checked[2]}
+                  checked={question.answers[2].checked}
                 >
                   {question.answers[2].content}
                 </AnswerContent>
@@ -282,11 +318,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[7].id}
                 visibleId={8}
-                checked={checked[7]}
+                checked={question.answers[7].checked}
               >
                 <AnswerContent
                   value={question.answers[7].points}
-                  checked={checked[7]}
+                  checked={question.answers[7].checked}
                 >
                   {question.answers[7].content}
                 </AnswerContent>
@@ -300,11 +336,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[3].id}
                 visibleId={4}
-                checked={checked[3]}
+                checked={question.answers[3].checked}
               >
                 <AnswerContent
                   value={question.answers[3].points}
-                  checked={checked[3]}
+                  checked={question.answers[3].checked}
                 >
                   {question.answers[3].content}
                 </AnswerContent>
@@ -316,11 +352,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[8].id}
                 visibleId={9}
-                checked={checked[8]}
+                checked={question.answers[8].checked}
               >
                 <AnswerContent
                   value={question.answers[8].points}
-                  checked={checked[8]}
+                  checked={question.answers[8].checked}
                 >
                   {question.answers[8].content}
                 </AnswerContent>
@@ -334,11 +370,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[4].id}
                 visibleId={5}
-                checked={checked[4]}
+                checked={question.answers[4].checked}
               >
                 <AnswerContent
                   value={question.answers[4].points}
-                  checked={checked[4]}
+                  checked={question.answers[4].checked}
                 >
                   {question.answers[4].content}
                 </AnswerContent>
@@ -350,11 +386,11 @@ export default function Board() {
               <AnswerBox
                 id={question.answers[9].id}
                 visibleId={10}
-                checked={checked[9]}
+                checked={question.answers[9].checked}
               >
                 <AnswerContent
                   value={question.answers[9].points}
-                  checked={checked[9]}
+                  checked={question.answers[9].checked}
                 >
                   {question.answers[9].content}
                 </AnswerContent>

@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import Console from "./components/Console";
 
 function App() {
-  const { user, isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const mainTheme = createTheme({
     palette: {
