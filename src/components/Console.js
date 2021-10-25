@@ -5,17 +5,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
 import { useTheme } from "@mui/system";
+import io from "socket.io-client";
 
 export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
   const history = useHistory();
   const [question, setQuestion] = useState({});
-  const [reload] = useState(false);
-  
+  const [reload, setReload] = useState(false);
+
+  const socket = io("https://harcmiliada-socket.herokuapp.com");
+
+  const handleSetReload = () => {
+    setReload(!reload);
+  }
+
+  const listenForCommands = () => {
+    socket.on('recieveCommand', (data) => {
+      handleSetReload()
+    })
+  }
+
   const crumbs = {
     past: [{ path: "/dashboard", label: "Pulpit" }],
     current: "Konsola kontrolna",
+  };
+
+  const initiateSocket = (room) => {
+    console.log(`Connecting socket...`);
+    if (socket && room) socket.emit("join", room);
+  };
+
+  const disconnectSocket = () => {
+    console.log("Disconnecting socket...");
+    if (socket) socket.disconnect();
+  };
+
+  const sendCommand = (type) => {
+    socket.emit("sendCommand", type, ["boards", "lists"]);
   };
 
   const toggleChecked = (id, commandType) => {
@@ -23,11 +50,13 @@ export default function Console() {
       method: "PUT",
     })
       .then(() => {
+        sendCommand(commandType);
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard/console" });
       })
       .catch((err) => console.log(err));
   };
+
 
   useEffect(() => {
     fetch(host + "questions/current")
@@ -36,6 +65,15 @@ export default function Console() {
         setQuestion(json);
       })
       .catch((err) => console.log(err));
+
+      initiateSocket("consoles");
+  
+      listenForCommands();
+  
+      return () => {
+        disconnectSocket();
+      };
+
   }, [reload]);
 
   return (
