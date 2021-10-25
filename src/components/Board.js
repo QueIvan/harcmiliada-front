@@ -63,6 +63,7 @@ const BodyContent = styled(MuiGrid)(({ theme }) => ({
 }));
 
 const BodyTypography = styled(MuiTypography)(({ theme }) => ({
+  fontVariant: "small-caps",
   width: "90%",
   position: "absolute",
   top: "50%",
