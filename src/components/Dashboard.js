@@ -203,7 +203,7 @@ export default function Dashboard() {
 
         if(changed){
           setTimeout(()=>{
-            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"])
+            socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles", "lists"])
           }, 500)
         }
 

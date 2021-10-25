@@ -263,176 +263,42 @@ export default function Board() {
           </HeaderContent>
         </GridHeader>
         <GridBody item container>
-          <GridRow item container>
-            {question.answers && question.answers.length > 0 ? (
-              <AnswerBox
-                id={question.answers[0].id}
-                visibleId={1}
-                checked={question.answers[0].checked}
-              >
-                <AnswerContent
-                  value={question.answers[0].points}
-                  checked={question.answers[0].checked}
-                >
-                  {question.answers[0].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-            {question.answers && question.answers.length > 5 ? (
-              <AnswerBox
-                id={question.answers[5].id}
-                visibleId={6}
-                checked={question.answers[5].checked}
-              >
-                <AnswerContent
-                  value={question.answers[5].points}
-                  checked={question.answers[5].checked}
-                >
-                  {question.answers[5].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-          </GridRow>
-          <GridRow item container>
-            {question.answers && question.answers.length > 1 ? (
-              <AnswerBox
-                id={question.answers[1].id}
-                visibleId={2}
-                checked={question.answers[1].checked}
-              >
-                <AnswerContent
-                  value={question.answers[1].points}
-                  checked={question.answers[1].checked}
-                >
-                  {question.answers[1].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-            {question.answers && question.answers.length > 6 ? (
-              <AnswerBox
-                id={question.answers[6].id}
-                visibleId={7}
-                checked={question.answers[6].checked}
-              >
-                <AnswerContent
-                  value={question.answers[6].points}
-                  checked={question.answers[6].checked}
-                >
-                  {question.answers[6].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-          </GridRow>
-          <GridRow item container>
-            {question.answers && question.answers.length > 2 ? (
-              <AnswerBox
-                id={question.answers[2].id}
-                visibleId={3}
-                checked={question.answers[2].checked}
-              >
-                <AnswerContent
-                  value={question.answers[2].points}
-                  checked={question.answers[2].checked}
-                >
-                  {question.answers[2].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-            {question.answers && question.answers.length > 7 ? (
-              <AnswerBox
-                id={question.answers[7].id}
-                visibleId={8}
-                checked={question.answers[7].checked}
-              >
-                <AnswerContent
-                  value={question.answers[7].points}
-                  checked={question.answers[7].checked}
-                >
-                  {question.answers[7].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-          </GridRow>
-          <GridRow item container>
-            {question.answers && question.answers.length > 3 ? (
-              <AnswerBox
-                id={question.answers[3].id}
-                visibleId={4}
-                checked={question.answers[3].checked}
-              >
-                <AnswerContent
-                  value={question.answers[3].points}
-                  checked={question.answers[3].checked}
-                >
-                  {question.answers[3].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-            {question.answers && question.answers.length > 8 ? (
-              <AnswerBox
-                id={question.answers[8].id}
-                visibleId={9}
-                checked={question.answers[8].checked}
-              >
-                <AnswerContent
-                  value={question.answers[8].points}
-                  checked={question.answers[8].checked}
-                >
-                  {question.answers[8].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-          </GridRow>
-          <GridRow item container>
-            {question.answers && question.answers.length > 4 ? (
-              <AnswerBox
-                id={question.answers[4].id}
-                visibleId={5}
-                checked={question.answers[4].checked}
-              >
-                <AnswerContent
-                  value={question.answers[4].points}
-                  checked={question.answers[4].checked}
-                >
-                  {question.answers[4].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-            {question.answers && question.answers.length > 9 ? (
-              <AnswerBox
-                id={question.answers[9].id}
-                visibleId={10}
-                checked={question.answers[9].checked}
-              >
-                <AnswerContent
-                  value={question.answers[9].points}
-                  checked={question.answers[9].checked}
-                >
-                  {question.answers[9].content}
-                </AnswerContent>
-              </AnswerBox>
-            ) : (
-              <AnswerBox />
-            )}
-          </GridRow>
+        {Array.from(Array(5).keys()).map((el) => {
+          return (<GridRow item container>
+              {question.answers && question.answers.length > el ? (
+                  <AnswerBox
+                  id={question.answers[el].id}
+                  visibleId={el+1}
+                  checked={question.answers[el].checked}
+                  >
+                  <AnswerContent
+                      value={question.answers[el].points}
+                      checked={question.answers[el].checked}
+                  >
+                      {question.answers[el].content}
+                  </AnswerContent>
+                  </AnswerBox>
+              ) : (
+                  <AnswerBox />
+              )}
+              {question.answers && question.answers.length > el+5 ? (
+                  <AnswerBox
+                  id={question.answers[el+5].id}
+                  visibleId={el+6}
+                  checked={question.answers[el+5].checked}
+                  >
+                  <AnswerContent
+                      value={question.answers[el+5].points}
+                      checked={question.answers[el+5].checked}
+                  >
+                      {question.answers[el+5].content}
+                  </AnswerContent>
+                  </AnswerBox>
+              ) : (
+                  <AnswerBox />
+              )}
+          </GridRow>)
+        })};
         </GridBody>
       </GridOuterContainer>
       <WrongBoxContainer sx={{left: "50px"}}>
