@@ -8,9 +8,9 @@ import { useHistory } from "react-router";
 import { useTheme } from "@mui/system";
 
 function changePort(port){
-  var port = parseInt(port);
-  port += (port === 65535) ? -1:1;
-  return port.toString();
+  var portValue = parseInt(port);
+  portValue += (portValue === 65535) ? -1:1;
+  return portValue.toString();
 }
 
 export default function Console() {
