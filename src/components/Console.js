@@ -29,7 +29,7 @@ export default function Console() {
     })
   }
   
-  let socket = io("http://"+window.location.hostname + ":" + (process.env.PORT || 4001));
+  let socket = io("http://"+window.location.hostname + ":" + (process.env.PORT+1 || 4001));
 
   const initiateSocket = (room) => {
     console.log(`Connecting socket...`);
