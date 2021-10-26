@@ -186,7 +186,7 @@ export default function Dashboard() {
   }
 
   function clearShownQuestions(id) {
-    fetch(host + "questions/current")
+    fetch(host + "questions/"+id)
       .then((response) => response.json())
       .then((json) => {
         let changed = false;
