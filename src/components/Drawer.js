@@ -199,12 +199,12 @@ export default function Drawer(content) {
 
   const handleLogin = () => {
     loginWithRedirect({
-      redirectUri: "http://localhost:3000/dashboard",
+      redirectUri: "https://harcmiliada.netlify.app/dashboard",
     });
   };
 
   const handleLogOut = () => {
-    logout({ returnTo: "http://localhost:3000/dashboard" });
+    logout({ returnTo: "https://harcmiliada.netlify.app/dashboard" });
   };
 
   const handleMove = (dest, toNew) => {
