@@ -18,6 +18,7 @@ import {
   Typography as MuiTypography,
   ListItem as MuiListItem,
   CssBaseline,
+  Skeleton
 } from "@mui/material";
 import BreadCrumbs from "./BreadCrumbs/BreadCrumbs";
 import {
@@ -198,12 +199,12 @@ export default function Drawer(content) {
 
   const handleLogin = () => {
     loginWithRedirect({
-      redirectUri: "https://harcmiliada.netlify.app/dashboard",
+      redirectUri: "http://localhost:3000/dashboard",
     });
   };
 
   const handleLogOut = () => {
-    logout({ returnTo: "https://harcmiliada.netlify.app/dashboard" });
+    logout({ returnTo: "http://localhost:3000/dashboard" });
   };
 
   const handleMove = (dest, toNew) => {
@@ -318,7 +319,7 @@ export default function Drawer(content) {
           }}
         >
           <DrawerHeader />
-          {content.crumbs ? <BreadCrumbs crumbs={content.crumbs} /> : null}
+          {content.crumbs ? <BreadCrumbs crumbs={content.crumbs} /> : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" variant="text" />}
           {content.children}
         </Box>
       </Box>

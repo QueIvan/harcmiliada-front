@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Tooltip, Box as MuiBox, Box } from "@mui/material";
+import { Grid, Typography, Tooltip, Box as MuiBox, Box, Skeleton } from "@mui/material";
 import Drawer from "./Drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -396,10 +396,10 @@ export default function Console() {
                     );
                   })
                 : null
-              : null}
+              : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
           </Grid>
         </Grid>
-      ) : null}
+      ) : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
     </Drawer>
   );
 }

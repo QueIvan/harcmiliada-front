@@ -7,6 +7,7 @@ import {
   Grid as MuiGrid,
   Typography as MuiTypography,
   Fade,
+  Skeleton
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -120,10 +121,11 @@ const WrongBox = styled(MuiBox)(({ theme }) => ({
 function AnswerBox(props) {
   const label = props.children;
   const checked = props.checked;
+  const loading = props.loading;
   const id = props.visibleId;
   return (
     <GridItem item>
-      <AnswerLabel id={id} checked={checked} />
+      <AnswerLabel loading={loading} id={id} checked={checked} />
       <BodyContent>{label}</BodyContent>
     </GridItem>
   );
@@ -172,6 +174,7 @@ function AnswerContent(props) {
 function AnswerLabel(props) {
   const id = props.id;
   const checked = props.checked;
+  const loading = props.loading;
   return (
     <Fade in={!checked}>
       <Grid
@@ -193,7 +196,7 @@ function AnswerLabel(props) {
         }}
       >
         <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={12}>
-          {id && id ? <IdTypography>{id}</IdTypography> : null}
+          {id && id ? <IdTypography>{id}</IdTypography> : (loading) ? <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" /> : null}
         </Grid>
       </Grid>
     </Fade>
@@ -257,8 +260,8 @@ export default function Board() {
     <BackBox>
       <GridOuterContainer container>
         <GridHeader item container sx={{ marginBottom: "15px" }}>
-          <HeaderContent>
-            {question.content ? question.content : null}
+          <HeaderContent sx={{width: "90%", textAlign: "center"}}>
+            {question.content ? question.content : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
           </HeaderContent>
         </GridHeader>
         <GridBody item container>
@@ -279,7 +282,7 @@ export default function Board() {
                     </AnswerContent>
                   </AnswerBox>
                 ) : (
-                  <AnswerBox />
+                  <AnswerBox loading={!question.answers} />
                 )}
                 {question.answers && question.answers.length > el + 5 ? (
                   <AnswerBox
@@ -295,7 +298,7 @@ export default function Board() {
                     </AnswerContent>
                   </AnswerBox>
                 ) : (
-                  <AnswerBox />
+                  <AnswerBox loading={!question.answers} />
                 )}
               </GridRow>
             );

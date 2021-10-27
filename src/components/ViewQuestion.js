@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, TextField, FormGroup } from "@mui/material";
+import { Box, Typography, Grid, TextField, FormGroup, Skeleton } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
@@ -673,7 +673,7 @@ export default function ViewQuestion() {
               </Grid>
             </form>
           </Grid>
-        ) : null}
+        ) : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
       </Box>
     </Drawer>
   );
