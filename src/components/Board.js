@@ -7,7 +7,8 @@ import {
   Grid as MuiGrid,
   Typography as MuiTypography,
   Fade,
-  Skeleton
+  Zoom,
+  Skeleton,
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -196,7 +197,16 @@ function AnswerLabel(props) {
         }}
       >
         <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={12}>
-          {id && id ? <IdTypography>{id}</IdTypography> : (loading) ? <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" /> : null}
+          {id && id ? (
+            <IdTypography>{id}</IdTypography>
+          ) : loading ? (
+            <Skeleton
+              sx={{ marginLeft: "auto", marginRight: "auto" }}
+              width="90%"
+              height="85px"
+              animation="wave"
+            />
+          ) : null}
         </Grid>
       </Grid>
     </Fade>
@@ -260,8 +270,17 @@ export default function Board() {
     <BackBox>
       <GridOuterContainer container>
         <GridHeader item container sx={{ marginBottom: "15px" }}>
-          <HeaderContent sx={{width: "90%", textAlign: "center"}}>
-            {question.content ? question.content : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
+          <HeaderContent sx={{ width: "90%", textAlign: "center" }}>
+            {question.content ? (
+              question.content
+            ) : (
+              <Skeleton
+                sx={{ marginLeft: "auto", marginRight: "auto" }}
+                width="90%"
+                height="85px"
+                animation="wave"
+              />
+            )}
           </HeaderContent>
         </GridHeader>
         <GridBody item container>
@@ -309,28 +328,32 @@ export default function Board() {
       <WrongBoxContainer sx={{ left: "50px" }}>
         {[...Array(sideCounter[0])].map(() => {
           return (
-            <WrongBox
-              sx={{
-                aspectRatio:
-                  sideCounter[1] === 3 && sideCounter[0] === 1 ? ".25" : "1",
-              }}
-            >
-              <FontAwesomeIcon size="6x" icon={faTimes} />
-            </WrongBox>
+            <Zoom in={true}>
+              <WrongBox
+                sx={{
+                  aspectRatio:
+                    sideCounter[1] === 3 && sideCounter[0] === 1 ? ".25" : "1",
+                }}
+              >
+                <FontAwesomeIcon size="6x" icon={faTimes} />
+              </WrongBox>
+            </Zoom>
           );
         })}
       </WrongBoxContainer>
       <WrongBoxContainer sx={{ right: "50px" }}>
         {[...Array(sideCounter[1])].map(() => {
           return (
-            <WrongBox
-              sx={{
-                aspectRatio:
-                  sideCounter[0] === 3 && sideCounter[1] === 1 ? ".25" : "1",
-              }}
-            >
-              <FontAwesomeIcon size="6x" icon={faTimes} />
-            </WrongBox>
+            <Zoom in={true}>
+              <WrongBox
+                sx={{
+                  aspectRatio:
+                    sideCounter[0] === 3 && sideCounter[1] === 1 ? ".25" : "1",
+                }}
+              >
+                <FontAwesomeIcon size="6x" icon={faTimes} />
+              </WrongBox>
+            </Zoom>
           );
         })}
       </WrongBoxContainer>
