@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faHandPaper, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -221,6 +221,7 @@ export default function Board() {
   const [question, setQuestion] = useState({});
   const [showContent, setShowContent] = useState([false, false]);
   const [sideCounter, setSideCounter] = useState([0, 0]);
+  const [pickSide, setPickSide] = useState(null);
   const [showError, setShowError] = useState(false);
   const [reload, setReload] = useState(false);
   const history = useHistory();
@@ -258,6 +259,8 @@ export default function Board() {
         }
       } else if (data.type === "displayContent"){
         setShowContent(data.contentStatus)
+      } else if (data.type === "pickSide"){
+        setPickSide(data.side.side);
       }
     });
   };
@@ -381,6 +384,68 @@ export default function Board() {
         })}
       </WrongBoxContainer>
       <Box sx={{position:"absolute", top: "0", left: "0", display: "flex", width: "100vw", height: "100vh", zIndex: 9999, justifyContent: "center", alignItems: "center"}}>
+        <Zoom in={pickSide==="left"}>
+          <Box
+            sx={{
+              position: "absolute",
+              width: "100px",
+              height: "100px",
+              top: "125px",
+              left: "50px",
+            }}
+          >
+            <Box
+              sx={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                color: "#00FFC5",
+                border: ".5rem solid #00FFC5",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                overflow: "hidden",
+                boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
+                "&>*": {
+                  filter: "0px 0px 10px #7c7c7c",
+                },
+              }}
+            >
+              <FontAwesomeIcon style={{marginLeft: "-7px", marginTop: "-2px"}} size="4x" icon={faHandPaper} />
+            </Box>
+          </Box>
+        </Zoom>
+        <Zoom in={pickSide==="right"}>
+          <Box
+            sx={{
+              position: "absolute",
+              width: "100px",
+              height: "100px",
+              top: "125px",
+              right: "50px",
+            }}
+          >
+            <Box
+              sx={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                color: "#00FFC5",
+                border: ".5rem solid #00FFC5",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                overflow: "hidden",
+                boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
+                "&>*": {
+                  filter: "0px 0px 10px #7c7c7c",
+                },
+              }}
+            >
+              <FontAwesomeIcon style={{marginLeft: "-7px", marginTop: "-2px"}} size="4x" icon={faHandPaper} />
+            </Box>
+          </Box>
+        </Zoom>
         <Zoom in={showError}>
           <Box>
             <WrongBox

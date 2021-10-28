@@ -123,6 +123,7 @@ export default function Console() {
     })
       .then(() => {
         sendCommand(commandType);
+        socket.emit("sendCommand", { type: "correctAnswer" }, ["sound_boards"]);
         toggleAnswer(id);
       })
       .catch((err) => console.log(err));
@@ -174,7 +175,7 @@ export default function Console() {
     });
 
     socket.emit("sendCommand", { type: "wrongAnswer", counter: sideCounter }, [
-      "boards",
+      "boards", "sound_boards"
     ]);
   };
 
