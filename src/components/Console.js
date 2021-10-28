@@ -65,6 +65,7 @@ export default function Console() {
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
+  const [showContent, setShowContent] = useState([false, false]);
   const [checked, setChecked] = useState([
     false,
     false,
@@ -144,12 +145,19 @@ export default function Console() {
 
     listenForCommands();
 
-    socket.emit("sendCommand", { type: "wrong", counter: [0, 0] }, ["boards"]);
+    socket.emit("sendCommand", { type: "wrongAnswer", counter: [0, 0] }, ["boards"]);
 
     return () => {
       disconnectSocket();
     };
   }, [reload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleShowContent = (id) => {
+    let dummy = [ ...showContent ];
+    dummy[id] = !dummy[id];
+    setShowContent(dummy);
+    socket.emit("sendCommand", { type: "displayContent", contentStatus: dummy }, ["boards"]);
+  }
 
   const handleCounterAddition = (checks) => {
     let sideCounter = [0, 0];
@@ -165,7 +173,7 @@ export default function Console() {
       }
     });
 
-    socket.emit("sendCommand", { type: "wrong", counter: sideCounter }, [
+    socket.emit("sendCommand", { type: "wrongAnswer", counter: sideCounter }, [
       "boards",
     ]);
   };
@@ -310,6 +318,148 @@ export default function Console() {
             xs={12}
             sx={{
               textAlign: "center",
+              marginBottom: ".75rem",
+              paddingBottom: ".25rem",
+              borderBottom: "1px solid rgba(224, 224, 224, 1)",
+            }}
+          >
+            <Typography
+              sx={{
+                fontVariant: "small-caps",
+                fontSize: "1.15rem",
+                marginBottom: ".25rem",
+                fontWeight: "550",
+              }}
+            >
+              Kontroler wyświetlania zawartości
+            </Typography>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              marginBottom: "1.25rem",
+              justifyContent: "center",
+              gap: "50px",
+            }}
+          >
+            <Grid item xs={4} sx={{display: 'flex',justifyContent: 'center'}}>
+              <Grid
+                item
+                sx={{
+                  width: "75%",
+                  padding: ".5rem .5rem",
+                  backgroundColor: "#f1f1f1",
+                  boxShadow: "0px 0px 5px #adadad",
+                  cursor: "pointer",
+                  transition: "background-color 0.25s ease-out",
+                  "&:not(:nth-of-type(4n+1))": {
+                    marginLeft: "25px",
+                  },
+                  "&:hover": {
+                    backgroundColor: "#e5e5e5",
+                  },
+                }}
+                onClick={() => handleShowContent(0)}
+              >
+                <Grid
+                  container
+                  sx={{
+                    padding: ".75rem",
+                    border: "5px solid ",
+                    borderColor: showContent[0]
+                      ? theme.palette.shown.main
+                      : theme.palette.available.main,
+                    boxShadow: "0px 0px 5px #adadad",
+                  }}
+                >
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    Wyświetl treść pytania
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={showContent[0] ? faEye : faEyeSlash}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={4} sx={{display: 'flex',justifyContent: 'center'}}>
+              <Grid
+                item
+                sx={{
+                  width: "75%",
+                  padding: ".5rem .5rem",
+                  backgroundColor: "#f1f1f1",
+                  boxShadow: "0px 0px 5px #adadad",
+                  cursor: "pointer",
+                  transition: "background-color 0.25s ease-out",
+                  "&:not(:nth-of-type(4n+1))": {
+                    marginLeft: "25px",
+                  },
+                  "&:hover": {
+                    backgroundColor: "#e5e5e5",
+                  },
+                }}
+                onClick={() => handleShowContent(1)}
+              >
+                <Grid
+                  container
+                  sx={{
+                    padding: ".75rem",
+                    border: "5px solid ",
+                    borderColor: showContent[1]
+                      ? theme.palette.shown.main
+                      : theme.palette.available.main,
+                    boxShadow: "0px 0px 5px #adadad",
+                  }}
+                >
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    Wyświetl dostępny pytania
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={showContent[1] ? faEye : faEyeSlash}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              textAlign: "center",
               marginBottom: "1.75rem",
               paddingBottom: ".25rem",
               borderBottom: "1px solid rgba(224, 224, 224, 1)",
@@ -372,7 +522,7 @@ export default function Console() {
                               xs={10}
                               sx={{
                                 display: "flex",
-                                alignItems: "center",
+                                justifyContent: "center",
                               }}
                             >
                               {row.content}

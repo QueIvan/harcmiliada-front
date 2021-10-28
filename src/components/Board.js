@@ -8,6 +8,7 @@ import {
   Typography as MuiTypography,
   Fade,
   Zoom,
+  Box,
   Skeleton,
 } from "@mui/material";
 import { useHistory } from "react-router";
@@ -41,7 +42,7 @@ const GridHeader = styled(MuiGrid)(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const HeaderContent = styled(MuiTypography)(({ theme }) => ({
+const HeaderContent = styled(MuiBox)(({ theme }) => ({
   color: "#f1f1f1",
   fontSize: "1.9rem",
   textShadow: "0px 0px 15px #f1f1f1",
@@ -82,10 +83,6 @@ const BodyTypography = styled(MuiTypography)(({ theme }) => ({
 }));
 
 const IdTypography = styled(MuiTypography)(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%,-50%)",
   padding: "5px 35px",
   backgroundColor: "#00FFC580",
   borderRadius: "50%",
@@ -109,11 +106,11 @@ const WrongBox = styled(MuiBox)(({ theme }) => ({
   borderColor: theme.palette.done.main,
   color: theme.palette.done.main,
   borderRadius: "5px",
-  boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   overflow: "hidden",
+  boxShadow: "0px 0px 10px 0px #7c7c7c, inset 0px 0px 10px 0px #7c7c7c",
   "&>*": {
     textShadow: "0px 0px 10px #7c7c7c",
   },
@@ -124,9 +121,11 @@ function AnswerBox(props) {
   const checked = props.checked;
   const loading = props.loading;
   const id = props.visibleId;
+  const status = props.status;
+
   return (
     <GridItem item>
-      <AnswerLabel loading={loading} id={id} checked={checked} />
+      <AnswerLabel status={status} loading={loading} id={id} checked={checked} />
       <BodyContent>{label}</BodyContent>
     </GridItem>
   );
@@ -176,6 +175,8 @@ function AnswerLabel(props) {
   const id = props.id;
   const checked = props.checked;
   const loading = props.loading;
+  const status = props.status;
+
   return (
     <Fade in={!checked}>
       <Grid
@@ -196,9 +197,11 @@ function AnswerLabel(props) {
           },
         }}
       >
-        <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240" }} item xs={12}>
+        <Grid sx={{ boxShadow: "inset 0px 0px 10px 0px #005240", display: "flex", justifyContent: "center", alignItems: "center"}} item xs={12}>
           {id && id ? (
-            <IdTypography>{id}</IdTypography>
+            <Zoom in={status} timeout={100*id}>
+              <IdTypography>{id}</IdTypography>
+            </Zoom>
           ) : loading ? (
             <Skeleton
               sx={{ marginLeft: "auto", marginRight: "auto" }}
@@ -216,7 +219,9 @@ function AnswerLabel(props) {
 export default function Board() {
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
+  const [showContent, setShowContent] = useState([false, false]);
   const [sideCounter, setSideCounter] = useState([0, 0]);
+  const [showError, setShowError] = useState(false);
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
@@ -239,8 +244,20 @@ export default function Board() {
       } else if (data === "toggleQuestion") {
         history.push("/empty");
         history.push("/");
-      } else if (data.type === "wrong") {
-        setSideCounter(data.counter);
+      } else if (data.type === "wrongAnswer") {
+        if((data.counter[0] > 0 || data.counter[1] > 0)){
+          setShowError(true);
+          setTimeout(() => {
+            setShowError(false);
+            setTimeout(() => {
+              setSideCounter(data.counter);
+            }, 100)
+          }, 500)
+        }else{
+          setSideCounter(data.counter);
+        }
+      } else if (data.type === "displayContent"){
+        setShowContent(data.contentStatus)
       }
     });
   };
@@ -271,8 +288,10 @@ export default function Board() {
       <GridOuterContainer container>
         <GridHeader item container sx={{ marginBottom: "15px" }}>
           <HeaderContent sx={{ width: "90%", textAlign: "center" }}>
-            {question.content ? (
-              question.content
+            {(showContent[0] && question.content) ? (
+              <Fade in={true} timeout={1500}>
+                <Box>{question.content}</Box>
+              </Fade>
             ) : (
               <Skeleton
                 sx={{ marginLeft: "auto", marginRight: "auto" }}
@@ -280,17 +299,18 @@ export default function Board() {
                 height="85px"
                 animation="wave"
               />
-            )}
+             ) }
           </HeaderContent>
         </GridHeader>
         <GridBody item container>
           {Array.from(Array(5).keys()).map((el) => {
             return (
               <GridRow item container key={el}>
-                {question.answers && question.answers.length > el ? (
+                {showContent[1] && question.answers && question.answers.length > el ? (
                   <AnswerBox
                     id={question.answers[el].id}
                     visibleId={el + 1}
+                    status={showContent}
                     checked={question.answers[el].checked}
                   >
                     <AnswerContent
@@ -301,12 +321,13 @@ export default function Board() {
                     </AnswerContent>
                   </AnswerBox>
                 ) : (
-                  <AnswerBox loading={!question.answers} />
+                  <AnswerBox loading={!(showContent[1] && question.answers)} />
                 )}
-                {question.answers && question.answers.length > el + 5 ? (
+                {showContent[1] && question.answers && question.answers.length > el + 5 ? (
                   <AnswerBox
                     id={question.answers[el + 5].id}
                     visibleId={el + 6}
+                    status={showContent}
                     checked={question.answers[el + 5].checked}
                   >
                     <AnswerContent
@@ -317,7 +338,7 @@ export default function Board() {
                     </AnswerContent>
                   </AnswerBox>
                 ) : (
-                  <AnswerBox loading={!question.answers} />
+                  <AnswerBox loading={!(showContent[1] && question.answers)} />
                 )}
               </GridRow>
             );
@@ -326,10 +347,11 @@ export default function Board() {
         </GridBody>
       </GridOuterContainer>
       <WrongBoxContainer sx={{ left: "50px" }}>
-        {[...Array(sideCounter[0])].map(() => {
+        {[...Array(sideCounter[0])].map((el) => {
           return (
             <Zoom in={true}>
               <WrongBox
+                key={el}
                 sx={{
                   aspectRatio:
                     sideCounter[1] === 3 && sideCounter[0] === 1 ? ".25" : "1",
@@ -342,10 +364,11 @@ export default function Board() {
         })}
       </WrongBoxContainer>
       <WrongBoxContainer sx={{ right: "50px" }}>
-        {[...Array(sideCounter[1])].map(() => {
+        {[...Array(sideCounter[1])].map((el) => {
           return (
             <Zoom in={true}>
               <WrongBox
+                key={el+3}
                 sx={{
                   aspectRatio:
                     sideCounter[0] === 3 && sideCounter[1] === 1 ? ".25" : "1",
@@ -357,6 +380,30 @@ export default function Board() {
           );
         })}
       </WrongBoxContainer>
+      <Box sx={{position:"absolute", top: "0", left: "0", display: "flex", width: "100vw", height: "100vh", zIndex: 9999, justifyContent: "center", alignItems: "center"}}>
+        <Zoom in={showError}>
+          <Box>
+            <WrongBox
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "250px",
+                aspectRatio: 1,
+                zIndex: 99999,
+                borderWidth: "1rem",
+                boxShadow: "0px 0px 10px 0px #000, inset 0px 0px 10px 0px #000",
+                "&>*": {
+                  filter: "drop-shadow(0px 0px 10px #000)"
+                },
+              }}
+            >
+              <FontAwesomeIcon style={{fontSize: "15rem"}} icon={faTimes} />
+            </WrongBox>
+          </Box>
+        </Zoom>
+      </Box>
     </BackBox>
   );
 }
