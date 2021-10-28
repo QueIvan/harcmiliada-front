@@ -8,7 +8,6 @@ import Drawer from "./components/Drawer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import Console from "./components/Console";
-import Sounds from "./components/Sounds";
 
 function App() {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -74,9 +73,6 @@ function App() {
           </Route>
           <Route exact path="/dashboard/view/:id">
             {isAuthenticated ? <ViewQuestion /> : <Drawer loggedout />}
-          </Route>
-          <Route exact path="/sounds">
-            {isAuthenticated ? <Sounds /> : <Drawer loggedout />}
           </Route>
         </Switch>
       </Router>

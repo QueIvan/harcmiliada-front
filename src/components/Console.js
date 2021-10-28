@@ -62,6 +62,8 @@ function Wrong(props) {
 }
 
 export default function Console() {
+  const audioEl1 = document.getElementsByClassName("audio-element")[0]
+  const audioEl2 = document.getElementsByClassName("audio-element")[1]
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
@@ -123,8 +125,9 @@ export default function Console() {
     })
       .then(() => {
         sendCommand(commandType);
-        socket.emit("sendCommand", { type: "correctAnswer" }, ["sound_boards"]);
         toggleAnswer(id);
+
+        audioEl1.play();
       })
       .catch((err) => console.log(err));
   };
@@ -175,8 +178,11 @@ export default function Console() {
     });
 
     socket.emit("sendCommand", { type: "wrongAnswer", counter: sideCounter }, [
-      "boards", "sound_boards"
+      "boards"
     ]);
+
+    audioEl2.play();
+
   };
 
   const checkedHandler = (id, side) => {
@@ -551,6 +557,14 @@ export default function Console() {
           </Grid>
         </Grid>
       ) : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
+      <div style={{visibility: "hidden"}}>
+        <audio className="audio-element">
+            <source src="https://www.mboxdrive.com/correct.mp3"></source>
+        </audio>
+        <audio className="audio-element">
+          <source src="https://www.mboxdrive.com/error.mp3"></source>
+        </audio>
+      </div>
     </Drawer>
   );
 }
