@@ -62,8 +62,8 @@ function Wrong(props) {
 }
 
 export default function Console() {
-  const audioEl1 = document.getElementsByClassName("audio-element")[0]
-  const audioEl2 = document.getElementsByClassName("audio-element")[1]
+  const errorSound = document.getElementsByClassName("audio-element")[0]
+  const correctSound = document.getElementsByClassName("audio-element")[1]
   const theme = useTheme();
   const host = "https://harcmiliada.herokuapp.com/";
   const [question, setQuestion] = useState({});
@@ -127,7 +127,7 @@ export default function Console() {
         sendCommand(commandType);
         toggleAnswer(id);
 
-        audioEl1.play();
+        errorSound.play();
       })
       .catch((err) => console.log(err));
   };
@@ -181,7 +181,7 @@ export default function Console() {
       "boards"
     ]);
 
-    audioEl2.play();
+    correctSound.play();
 
   };
 
@@ -559,10 +559,10 @@ export default function Console() {
       ) : <Skeleton sx={{marginLeft: "auto", marginRight: "auto"}} width="90%"  height="85px" animation="wave" />}
       <div style={{visibility: "hidden"}}>
         <audio className="audio-element">
-            <source src="https://www.mboxdrive.com/correct.mp3"></source>
+          <source src="https://www.mboxdrive.com/error.mp3"></source>
         </audio>
         <audio className="audio-element">
-          <source src="https://www.mboxdrive.com/error.mp3"></source>
+          <source src="https://www.mboxdrive.com/correct.mp3"></source>
         </audio>
       </div>
     </Drawer>

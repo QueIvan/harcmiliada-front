@@ -178,7 +178,7 @@ export default function Dashboard() {
       method: "PUT",
     })
       .then(() => {
-        socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles"]);
+        socket.emit("sendCommand", "toggleQuestion", ["boards", "consoles", "presenters"]);
         history.push({ pathname: "/empty" });
         history.replace({ pathname: "/dashboard" });
       })
@@ -204,7 +204,7 @@ export default function Dashboard() {
           setTimeout(() => {
             socket.emit("sendCommand", "toggleQuestion", [
               "boards",
-              "consoles",
+              "consoles"
             ]);
             history.push("/empty");
             history.push("/dashboard");
