@@ -9,7 +9,8 @@ import io from "socket.io-client";
 
 const BackBox = styled(MuiBox)(({ theme }) => ({
   width: "100vw",
-  height: "100vh",
+  minHeight: "100vh",
+  height: "100%",
   display: "flex",
   backgroundColor: theme.palette.board.bg,
   overflow: "hidden",
@@ -18,8 +19,7 @@ const BackBox = styled(MuiBox)(({ theme }) => ({
 
 const HeaderContent = styled(MuiBox)(({ theme }) => ({
   color: "#f1f1f1",
-  fontSize: "1rem",
-  marginTop: "150px",
+  fontSize: "1rem"
 }));
 
 export default function Presenter() {
