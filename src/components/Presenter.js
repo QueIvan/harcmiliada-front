@@ -14,6 +14,7 @@ const BackBox = styled(MuiBox)(({ theme }) => ({
   display: "flex",
   backgroundColor: theme.palette.board.bg,
   overflow: "hidden",
+  alignItems: "center",
   justifyContent: "center",
 }));
 
