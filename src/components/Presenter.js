@@ -75,7 +75,7 @@ export default function Presenter() {
         {question ? (
           <Fade in={question} timeout={1500}>
             <Box>
-              Pytanie 3211-231-111-213a:
+              Pytanie {question.id}:
               <Box
                 sx={{
                   fontSize: "1.9rem",
