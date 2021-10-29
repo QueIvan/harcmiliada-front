@@ -127,7 +127,7 @@ export default function Console() {
         sendCommand(commandType);
         toggleAnswer(id);
 
-        errorSound.play();
+        correctSound.play();
       })
       .catch((err) => console.log(err));
   };
@@ -181,7 +181,7 @@ export default function Console() {
       "boards"
     ]);
 
-    correctSound.play();
+    errorSound.play();
 
   };
 
